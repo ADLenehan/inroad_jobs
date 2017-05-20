@@ -1,0 +1,5 @@
+{% if labels and field.label %}
+    <label for="{{ field.auto_id }}" class="control-label {% if field.field.required %}required-field{% endif %} {{ css_classes.label }}">
+        {{ field.label|safe }}:
+    </label>
+{% endif %}

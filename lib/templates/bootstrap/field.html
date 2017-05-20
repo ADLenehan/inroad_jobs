@@ -1,0 +1,90 @@
+{% load bootstrap urlparsed %}
+{% if field.is_hidden and field|bootstrap_widget_class != "ratinginput" %}
+    {{ field }}
+{% else %}
+    <div id="div_{{ field.auto_id }}" class="form-group {% if field.errors %}has-error{% endif %} {% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+        {% if field|bootstrap_widget_class == "checkboxselectmultiple" %}
+            <div class="{{ css_classes.wrap }}">
+                {% include "bootstrap/_field_label.html" %}
+                {% include "bootstrap/_field_errors_block.html" %}
+                {% for choice in field.field.choices %}
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" {% if choice.0 in field.value or choice.0|stringformat:"s" in field.value %}checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0 }}"> {{ choice.1 }}
+                        </label>
+                    </div>
+                {% endfor %}
+                {% include "bootstrap/_field_help_text.html" %}
+            </div>
+        {% elif field|bootstrap_widget_class == "radioselect" %}
+            <div class="{{ css_classes.wrap }}">
+                {% include "bootstrap/_field_label.html" %}
+                {% include "bootstrap/_field_errors_block.html" %}
+                {% for choice in field.field.choices %}
+                    <div class="radio">
+                        <label>
+                            <input type="radio" {% if choice.0 == field.value or choice.0|stringformat:"s" == field.value %}checked="checked" {% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0 }}"> {{ choice.1 }}
+                        </label>
+                    </div>
+                {% endfor %}
+                {% include "bootstrap/_field_help_text.html" %}
+            </div>
+        {% elif field|bootstrap_widget_class == "clearablefileinput" %}
+            <div class="{{ css_classes.wrap }}">
+                {% include "bootstrap/_field_label.html" %}
+                {% if field|bootstrap_field_class == "imagefield" and field.value and form.errors|length == 0 %}
+{#                    <img src="{{ field.value.url }}" class="input-file-image"/>#}
+                    <img src="{{ field.value.url }}" class="input-file-image"/>
+                {% endif %}
+
+                {% include "bootstrap/_field_errors_block.html" %}
+                <div class="input-group input-file">
+                    {% if field.value %}
+                        <span class="input-group-addon input-file-delete">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="{{ field.html_name }}-clear"> Delete
+                                </label>
+                            </div>
+                        </span>
+                    {% endif %}
+                    <div class="form-control">
+                        {% if field.value %}
+                            <a style="display: block; overflow: hidden" href="{{ field.value.url }}" target="_blank">{{ field.value.url|urlparsed_file_name }}</a>
+                        {% endif %}
+                    </div>
+                    <span class="input-group-addon input-file-field">
+                        <a class='btn btn-primary' href="javascript:">
+                            Browse
+                            <input type="file" name="{{ field.html_name }}" onchange="$(this).parent().parent().parent().find('.form-control').html($(this).val().replace('C:\\fakepath\\', ''));">
+                        </a>
+                    </span>
+                </div>
+                {% include "bootstrap/_field_help_text.html" %}
+            </div>
+        {% else %}
+            {% if field|bootstrap_widget_class == "checkboxinput" %}
+                <div class="{{ css_classes.single_container }}">
+                    {% include "bootstrap/_field_label.html" %}
+                    {% include "bootstrap/_field_errors_block.html" %}
+
+                    <div class="radio">
+                        <label class="radio-inline">
+                          <input type="radio" name="{{ field.html_name }}" value="1"{% if field.value == True %} checked{% endif %}> Yes
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="{{ field.html_name }}" value=""{% if field.value == False %} checked{% endif %}> No
+                        </label>
+                    </div>
+
+                    {% include "bootstrap/_field_help_text.html" %}
+                </div>
+            {% else %}
+                {% include "bootstrap/_field_label.html" %}
+                {% include "bootstrap/_field_errors.html" %}
+                {{ field }}
+                {% include "bootstrap/_field_help_text.html" %}
+            {% endif %}
+        {% endif %}
+    </div>
+{% endif %}

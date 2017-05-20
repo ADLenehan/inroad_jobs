@@ -1,0 +1,54 @@
+<div class="text-center">
+    <nav>
+        <ul class="pagination text-xs-center">
+
+            <li class="page-item {% if page.number == 1 %} disabled"{% endif %}>
+                <a class="page-link" href="{{ base_url }}1">
+                    <i class="fa fa-fast-backward"></i>
+                    <span class="sr-only">First</span>
+                </a>
+            </li>
+
+            <li class="page-item {% if page.has_previous == False %} disabled" {% endif %}>
+                <a class="page-link" href="{% if page.has_previous == True %}{{ base_url }}{{ page.previous_page_number }}{% endif %}">
+                    <i class="fa fa-step-backward"></i>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+
+            {% for x in page_range %}
+                {% if x == page.number %}
+
+                    <li class="page-item active hidden-xs-down pull-left">
+                        <a class="page-link" href="{{ base_url }}{{ x }}">
+                            {{ x }} of {{ page.paginator.num_pages }}
+                        </a>
+                    </li>
+
+                    <li class="page-item active hidden-xs-up">
+                        <a class="page-link" href="{{ base_url }}{{ x }}">{{ x }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item hidden-xs">
+                        <a class="page-link" href="{{ base_url }}{{ x }}">{{ x }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            <li class="page-item {% if page.has_next == False %} disabled"{% endif %}>
+                <a class="page-link" href="{% if page.has_next == True %}{{ base_url }}{{ page.next_page_number }}{% endif %}">
+                    <i class="fa fa-step-forward"></i>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+
+            <li class="page-item {% if page.number == page.paginator.num_pages %} disabled"{% endif %}>
+                <a class="page-link" href="{{ base_url }}{{ page.paginator.num_pages }}">
+                    <i class="fa fa-fast-forward"></i>
+                    <span class="sr-only">Last</span>
+                </a>
+            </li>
+        </ul>
+        <div><b>{{ page.start_index }}</b> to <b>{{ page.end_index }}</b> of <b>{{ page.paginator.count }}</b></div>
+    </nav>
+</div>

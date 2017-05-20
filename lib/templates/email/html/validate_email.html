@@ -1,0 +1,7 @@
+{% autoescape off %}
+    Almost there! pleases click <a href="{{ domain }}{% url 'user_company_validate' uidb64=uid token=token user_company_id=user_company_id %}">this link</a>
+    to validate your company email and start using {{ site_name }}
+
+    <p>Thanks for using our site!</p>
+    <p>The Inroad team.</p>
+{% endautoescape %}
