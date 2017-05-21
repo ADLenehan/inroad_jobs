@@ -1,0 +1,7 @@
+{% extends 'layouts/frontend.html' %}
+    {% block title_block %}
+        Login
+    {% endblock %}
+    {% block main_content %}
+        <a href="{% url 'social:begin' 'facebook' %}">Login</a>
+    {% endblock %}

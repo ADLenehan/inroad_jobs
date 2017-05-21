@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +26,15 @@ SECRET_KEY = '-2ckaej0hbd!+9s-%h5y(c9+^mt8ukkfk_h+rk5mjkhdescwmz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'www.inroad.co',
+    'inroad.co',
+    'dev.inroad.co',
+    'local.inroad.co',
+    '192.168.33.10',
+    '127.0.0.1',
+    'localhost'
+]
 
 
 # Application definition
@@ -39,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lib',
     'users',
+    'jobs',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -49,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'inroad_jobs.urls'
@@ -56,18 +68,26 @@ ROOT_URLCONF = 'inroad_jobs.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['/Users/alenehan/Sites/Python/inroad_jobs/lib/templates/layouts'],
         'APP_DIRS': True,
         'OPTIONS': {
+            'debug': True,
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 WSGI_APPLICATION = 'inroad_jobs.wsgi.application'
 
@@ -78,7 +98,7 @@ WSGI_APPLICATION = 'inroad_jobs.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': (os.path.join(BASE_DIR, 'db.sqlite3'))
     }
 }
 
@@ -119,4 +139,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home'
+SOCIAL_AUTH_FACEBOOK_KEY = '137106250106856'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'f26be516be7843047b14f4740d0650b3'
+
+#Static routing
+STATICFILES_DIRS = (BASE_DIR, 'static')
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+STATICFILES_LOCATION = '/static/'
 STATIC_URL = '/static/'
+
+#Media routing
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = '/media/'

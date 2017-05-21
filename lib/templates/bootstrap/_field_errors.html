@@ -1,5 +1,0 @@
-{% for error in field.errors %}
-    <span id="error_{{ field.auto_id }}_{{ forloop.counter }}" class="error-msg text-danger">
-        {% if error == 'This field is required.' %}Required{% else %}{{ error }}{% endif %}
-    </span>
-{% endfor %}
