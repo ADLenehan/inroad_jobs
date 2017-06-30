@@ -6,10 +6,6 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 
 
-@login_required
-def home(request):
-    return render(request, 'home.html')
-
 
 def logout(request):
     auth_logout(request)

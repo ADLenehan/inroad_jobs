@@ -1,0 +1,34 @@
+{% extends 'layouts/frontend.html' %}
+    {% block title_block %}
+        Home
+    {% endblock %}
+    {% block main_content %}
+        <h2>Homepage</h2>
+        {% if positions %}
+            <div class="card-columns">
+            {% for position in positions %}
+                            <div class="card animated fadeInUp" >
+                                <div class="card-img-top img-responsive" style= "background-color: #{{ position.color }};">
+                                    <img style="width:200px; display: block; margin: 0 auto;" src="/media/{{ position.logo }}">
+                                </div>
+                                <div class="card-block">
+                                     <h4 class="card-title">{{ position.job_title }}</h4>
+                                        <h6 class="card-subtitle text-muted">{{ position.city }}, {{ position.state }}</h6>
+                                            <p class="card-text">{{ position.description }}</p>
+                                </div>
+                                <div class="card-block">
+                                    Button Button
+                                </div>
+                            </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <p>Hello {{ user.username }}!</p>
+            <a href="{% url 'logout' %}">logout</a>
+            <a href="{% url 'add_position' %}">Add a New Position</a><br />
+        {% else %}
+            <p>You have not been authenticated</p>
+        {% endif %}
+        <span id="indeed_at"><a title="Job Search" href="https://www.indeed.com" rel="nofollow" >jobs by <img alt=Indeed src="https://www.indeed.com/p/jobsearch.gif" style="border: 0; vertical-align: middle;"></a></span>
+    {% endblock %}
