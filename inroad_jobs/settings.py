@@ -16,12 +16,11 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-2ckaej0hbd!+9s-%h5y(c9+^mt8ukkfk_h+rk5mjkhdescwmz'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -49,7 +48,10 @@ INSTALLED_APPS = [
     'lib',
     'users',
     'jobs',
-    'social_django'
+    'social_django',
+    'requests',
+    'grequests',
+    'pprint'
 ]
 
 MIDDLEWARE = [
@@ -142,8 +144,8 @@ USE_TZ = True
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
-SOCIAL_AUTH_FACEBOOK_KEY = '137106250106856'
-SOCIAL_AUTH_FACEBOOK_SECRET = 'f26be516be7843047b14f4740d0650b3'
+SOCIAL_AUTH_FACEBOOK_KEY = ''
+SOCIAL_AUTH_FACEBOOK_SECRET = ''
 
 #Static routing
 STATICFILES_DIRS = (BASE_DIR, 'static')
@@ -157,6 +159,6 @@ STATICFILES_LOCATION = '/static/'
 STATIC_URL = '/static/'
 
 #Media routing
-MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+MEDIA_DIR = os.path.join(BASE_DIR, 'media/')
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
