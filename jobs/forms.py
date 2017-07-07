@@ -27,3 +27,11 @@ class PositionForm(forms.ModelForm):
             url = 'http://' + url
             cleaned_data['company_site_url'] = url
         return cleaned_data
+
+
+class CommentForm(forms.ModelForm):
+    text = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False)
+
+    class Meta:
+        model = Comment
+        fields = ['text',]

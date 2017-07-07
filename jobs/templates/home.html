@@ -3,24 +3,22 @@
         Home
     {% endblock %}
     {% block main_content %}
-        <h2>Homepage</h2>
+        <h2>Homepage</h2><br><br><br><br><br>
         {% if positions %}
-            <div class="card-columns">
-            {% for position in positions %}
-                            <div class="card animated fadeInUp" >
-                                <div class="card-img-top img-responsive" style= "background-color: #{{ position.color }};">
-                                    <img style="width:200px; display: block; margin: 0 auto;" src="/media/{{ position.logo }}">
-                                </div>
-                                <div class="card-block">
-                                     <h4 class="card-title">{{ position.job_title }}</h4>
-                                        <h6 class="card-subtitle text-muted">{{ position.city }}, {{ position.state }}</h6>
-                                            <p class="card-text">{{ position.description }}</p>
-                                </div>
-                                <div class="card-block">
-                                    Button Button
-                                </div>
+            <div class = card-columns>
+                {% for position in positions %}
+                            <div class="card" data-toggle="modal" data-target="#exampleModalLive">
+                                    <div class="card-img-top img-responsive" style= "background-color: #{{ position.color }}; height:70px;">
+                                        <img src="/media/{{ position.logo }}">
+                                    </div>
+                                    <div class="card-block">
+                                         <h4 class="card-title">{{ position.job_title }}</h4>
+                                            <h6 class="card-subtitle text-muted">{{ position.city }}, {{ position.state }}</h6>
+                                                <p class="card-text">{{ position.description }}</p>
+                                                <p class="card-text text-center"><small class="text-muted">Click for info</small></p>
+                                    </div>
                             </div>
-            {% endfor %}
+                    {% endfor %}
             </div>
         {% endif %}
         {% if user.is_authenticated %}
@@ -30,5 +28,42 @@
         {% else %}
             <p>You have not been authenticated</p>
         {% endif %}
-        <span id="indeed_at"><a title="Job Search" href="https://www.indeed.com" rel="nofollow" >jobs by <img alt=Indeed src="https://www.indeed.com/p/jobsearch.gif" style="border: 0; vertical-align: middle;"></a></span>
+            <span id="indeed_at"><a title="Job Search" href="https://www.indeed.com" rel="nofollow" >jobs by <img alt=Indeed src="https://www.indeed.com/p/jobsearch.gif" style="border: 0; vertical-align: middle;"></a></span>
+
+            <!-- .modal-profile -->
+            <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #3B5998; height: 100px;">
+                            <img src="/media/images/positions/Facebook.png">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card-block">
+                                <h2 class="card-title">Test Job</h2>
+                                <h4 class="card-subtitle text-muted">New York, NY</h4>
+                                <p class="card-text">Nininiininini</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                  $('a.thumb').click(function(event){
+                    event.preventDefault();
+                    var content = $('.modal-body');
+                    content.empty();
+                    var title = $(this).attr("card-title");
+                    $('.modal-title').html(title);
+                    content.html($(this).html());
+                    $(".modal-profile").modal({show:true});
+                });
+            </script>
+	<!-- //.modal-profile -->
     {% endblock %}

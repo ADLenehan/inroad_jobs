@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
-from social_django.models import UserSocialAuth
 
 
 class Company(models.Model):
@@ -39,6 +38,17 @@ class Position(models.Model):
     def __str__(self):
         return self.job_title
 
+
 class Comment(models.Model):
-    position = models.ForeignKey(Position)
-    user = models.ForeignKey(UserSocialAuth)
+    position = models.ForeignKey(Position, related_name="Comments")
+    author = models.ForeignKey(User)
+    text = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    approved_comment = models.BooleanField(default=False)
+
+    def approve(self):
+        self.approved_comment = True
+        self.save()
+
+    def __str__(self):
+        return self.text

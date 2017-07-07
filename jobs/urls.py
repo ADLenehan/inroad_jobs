@@ -7,4 +7,5 @@ from jobs import views
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^add_position/$', views.add_position, name='add_position'),
+    url(r'^(?P<pk>\d+)/comment/$', views.add_comment, name='add_comment'),
 ]

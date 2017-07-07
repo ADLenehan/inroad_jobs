@@ -3,22 +3,26 @@
         Add Position
     {% endblock %}
     {% block main_content %}
-        <form id = "position_form" method = "post" action = {% url 'add_position' %}>
-            {% csrf_token %}
-            <input type='hidden' name='position_id' value='{{ position_id }}'>
-            {% if position_form.non_field_errors %}
+        <div >
+        <div class="card w-75 mx-auto animated fadeInRight" >
+            <form id = "position_form" method = "post" action = {% url 'add_position' %}>
+                <h1 class="card-title">Add an open position: </h1>
+                {% csrf_token %}
+                    <input type='hidden' name='position_id' value='{{ position_id }}'>
+                    {% if position_form.non_field_errors %}
                     {{ position_form.non_field_errors.as_text }}
-            {% endif %}
-            <p>Company: {{ position_form.company }}</p>
-            <p>Experience: {{ position_form.experience }}</p>
-            <p>and</p>
-            <p>Indeed ID: {{ position_form.indeed_id }}</p>
-            <p>or</p>
-            <p>Description: {{ position_form.description }}</p>
-            <p>Job URL: {{ position_form.url }}</p>
-            <p>City: {{ position_form.city }}</p>
-            <p>State: {{ position_form.state }}</p>
-            <input type="submit" name="submit" value="Create Position" />
-        </form>
-        <span id="indeed_at"><a title="Job Search" href="https://www.indeed.com" rel="nofollow" >jobs by <img alt=Indeed src="https://www.indeed.com/p/jobsearch.gif" style="border: 0; vertical-align: middle;"></a></span>
+                    {% endif %}
+                    <p>Company: {{ position_form.company }}</p>
+                    <p>Experience: {{ position_form.experience }}</p>
+                    <p>and</p>
+                    <p>Indeed ID: {{ position_form.indeed_id }}</p>
+                    <p>or</p>
+                    <p>Description: {{ position_form.description }}</p>
+                    <p>Job URL: {{ position_form.url }}</p>
+                    <p>City: {{ position_form.city }}</p>
+                    <p>State: {{ position_form.state }}</p>
+                <button type="submit" name="submit" value="Create Position" class="btn btn-info">Create Position</button>
+            </form>
+        </div>
+        </div>
     {% endblock %}

@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, render_to_response, redirect
-from jobs.forms import PositionForm
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404
+from jobs.forms import PositionForm, CommentForm
 from jobs.models import Position, Company
 import requests, json, grequests, pprint
 from django.contrib.auth import logout as auth_logout
@@ -85,9 +85,28 @@ def add_position(request):
         form = PositionForm(request.POST)
 
         if form.is_valid():
-            form.save(commit=True)
-            return home(request)
+            position = form.save(commit=True)
+            return redirect('add_comment', position.pk)
         else:
             print(form.errors)
 
     return render(request, 'add_position.html', {'position_form': form})
+
+@login_required
+def add_comment(request, pk):
+    form = CommentForm()
+    position = get_object_or_404(Position, pk=pk)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.position = position
+            comment.save()
+            return redirect('home')
+        else:
+            form = CommentForm()
+
+    return render(request,'add_comment.html', {'comment_form': form})
