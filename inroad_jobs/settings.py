@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = '-2ckaej0hbd!+9s-%h5y(c9+^mt8ukkfk_h+rk5mjkhdescwmz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -144,8 +144,8 @@ USE_TZ = True
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
-SOCIAL_AUTH_FACEBOOK_KEY = ''
-SOCIAL_AUTH_FACEBOOK_SECRET = ''
+SOCIAL_AUTH_FACEBOOK_KEY = '137106250106856'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'f26be516be7843047b14f4740d0650b3'
 
 #Static routing
 STATICFILES_DIRS = (BASE_DIR, 'static')

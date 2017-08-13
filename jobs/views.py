@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, render_to_response, redirect, get_object_or_404
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404, get_list_or_404
 from jobs.forms import PositionForm, CommentForm
-from jobs.models import Position, Company
+from jobs.models import Position, Company, Comment
 import requests, json, grequests, pprint
 from django.contrib.auth import logout as auth_logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.http import HttpResponse
 from lib.api import indeed
 
@@ -16,7 +16,6 @@ def home(request):
     job_ids = ""
     reqs = []
     json_txts = []
-    job_list = {}
 
     try:
         positions = Position.objects.all()
@@ -32,7 +31,6 @@ def home(request):
                     reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
                          + job_ids + '&v=2&format=json')
 
-        #reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='+ job_ids + '&v=2&format=json')
         reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
                     + job_ids + '&v=2&format=json')
         rs = (grequests.get(u) for u in reqs)
@@ -49,7 +47,6 @@ def home(request):
             position.logo = position.company.logo
             position.color = position.company.color
             position.company_name = position.company.name
-            print(position.logo)
             if position.indeed_id and flat_list[position.indeed_id]:
                 position.job_title = flat_list[position.indeed_id]['jobtitle']
                 position.city = flat_list[position.indeed_id]['city']
@@ -60,9 +57,6 @@ def home(request):
                 del position
             else:
                 pass
-
-        #pprint.pprint(flat_list)
-        #print(positions[0].company)
 
         context_dict['positions'] = positions
 
@@ -110,3 +104,15 @@ def add_comment(request, pk):
             form = CommentForm()
 
     return render(request,'add_comment.html', {'comment_form': form})
+
+
+def comments(request, pk):
+
+    try:
+        comments_obj = Comment.objects.filter(position=pk).order_by('created_on').values('author','text')
+
+    except Comment.DoesNotExist:
+        comments_obj = None
+
+    return JsonResponse({'results': list(comments_obj)})
+

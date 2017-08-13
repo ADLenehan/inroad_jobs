@@ -15,14 +15,16 @@
   text-align: center;
 }
 
+.inroad-blue {
+  background-color: #36D1C4;
+}
+
 /**************/
 /*   Global  */
 /************/
 
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: KannadaSangamMN;
-    margin-bottom: 0rem;
+h4, h6, p {
+    font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 html {
@@ -95,6 +97,9 @@ form {
     text-shadow: 0 2px 4px rgba(0,0,0,0.50);
 }
 
+.container {
+    padding-top: 80px !important;
+}
 
 /**************/
 /* cards     */
@@ -112,6 +117,8 @@ form {
   background: #fff;
   border-radius: 5px;
   backface-visibility: hidden;
+  transition: transform .15s linear;
+  transform: scale(1.00);
 }
 
 .card:hover {
@@ -119,7 +126,7 @@ form {
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
   transition: transform .15s linear;
-  transform: scale(1.03);
+  transform: scale(1.04);
 }
 
 .card:active {
@@ -127,7 +134,7 @@ form {
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
   transition: transform .10s linear;
-  transform: scale(1.00);
+  transform: scale(1.02);
 }
 
 @media (min-width: 576px) {
@@ -150,8 +157,23 @@ form {
   width:50%;
   display: block;
   margin:0 auto;
-  padding-top: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;
  }
+
+#comments > .card-block  {
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card-block.buttons {
+  padding: 0rem 1.25rem 0rem 1.25rem;
+  text-align:center !important;
+  margin:auto;
+}
+
+.card p {
+  margin-top: 5px;
+}
 
 /**************/
 /* modals  */
@@ -159,7 +181,7 @@ form {
 
 .modal {
   position: fixed;
-  top: 200px;
+  top: 100px;
   right: 0;
   bottom: 0;
   left: 0;
@@ -204,13 +226,18 @@ form {
   padding: 15px;
   border-bottom: 1px solid #eceeef;
   border-radius: 0.3rem 0.3rem 0rem 0rem;
+  height: 75px;
+}
+
+.modal-body {
+  padding: 1.25rem 1.25rem 0rem 1.25rem;
 }
 
 .modal-header img {
-  width:50%;
+  height: 60px;
   display: block;
   margin:0 auto;
-  padding-top: 15px;
+  padding-top: 0px;
 }
 
 .modal-backdrop.fade {
@@ -222,51 +249,54 @@ form {
 }
 
 
+.card-text .fa {
+  transition: .3s transform ease-in-out;
+}
+
+.card-text .collapsed .fa {
+  transform: scaleY(-1);
+}
+
 /**************/
 /* buttons  */
 /************/
 
-.btn-round {
-    border-radius: 30px;
-}
 
-.btn-xl {
-  padding: 1rem 2rem;
-  font-size: 1.75rem;
-  border-radius: 2rem;
-    margin-top: 60px;
-    margin-bottom: 60px;
-}
-
-.btn-red {
-    background: #FB624A;
+.btn-inroad {
+    background-color: #36D1C4;
+    padding: 25px 15px 23px 15px;
+    border-radius: 5px;
     color: #FFFFFF;
+    font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    font-size: 1.25em;
+    line-height: .8em;
+    text-align: center;
+    border: 2px solid #36D1C4;
+}
+.btn-inroad:hover {
+    background-color: #30E8A5;
+    border: 2px solid #30E8A5;
+    color: #FFFFFF
 }
 
-.btn-red:hover {
-  color: #fff;
-  background-color: #d75741;
+.btn-inroad-open {
+    background-color: #FFFFFF;
+    padding: 25px 15px 23px 15px;
+    border-radius: 5px;
+    color: #36D1C4;
+    font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    font-size: 1.25em;
+    line-height: .8em;
+    text-align: center;
+    border: 2px solid #36D1C4;
 }
 
-.btn-red:focus, .btn-red.focus {
-  color: #fff;
-  background-color: #d95741;
+.btn-inroad-open:hover {
+    color: #30E8A5;
+    border-color: #30E8A5;
 }
-
-.btn-red:active, .btn-red.active,
-.open > .btn-red.dropdown-toggle {
-  color: #fff;
-  background-color: #d95741;
-}
-
-.btn-red:active:hover, .btn-red:active:focus, .btn-red:active.focus, .btn-red.active:hover, .btn-red.active:focus, .btn-red.active.focus,
-.open > .btn-red.dropdown-toggle:hover,
-.open > .btn-red.dropdown-toggle:focus,
-.open > .btn-red.dropdown-toggle.focus {
-  color: #fff;
-  background-color: #af4a36;
-}
-
 
 
 

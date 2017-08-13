@@ -4,13 +4,11 @@
 {% block head %}{% endblock %}
 <body>
 
-{% if user.is_authenticated %}
-<nav class="navbar navbar-light bg-faded">
-    <ul class="nav navbar-nav">
-        <a href="{% url 'home' %}"><img src='/static/img/inroad-logo.png' style="height: 44px"></a>
 
-    </ul>
+<nav class="navbar navbar-light inroad-blue fixed-top">
+        <a class = "navbar-brand" href="{% url 'home' %}"><img src='/static/img/Inroad-white.png' style="height: 50px"></a>
 </nav>
+{% if user.is_authenticated %}
 {% endif %}
 <div class="container">
 {% block main_content %}{% endblock %}

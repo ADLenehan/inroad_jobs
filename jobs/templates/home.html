@@ -3,20 +3,26 @@
         Home
     {% endblock %}
     {% block main_content %}
-        <h2>Homepage</h2><br><br><br><br><br>
+        <br>
+        <div class="btn-group" role="group" aria-label="...">
+            <button type="button" class="btn btn-secondary">Left</button>
+            <button type="button" class="btn btn-secondary">Middle</button>
+            <button type="button" class="btn btn-secondary">Right</button>
+        </div>
+        <br><br>
         {% if positions %}
             <div class = card-columns>
                 {% for position in positions %}
-                            <div class="card" data-toggle="modal" data-target="#exampleModalLive">
-                                    <div class="card-img-top img-responsive" style= "background-color: #{{ position.color }}; height:70px;">
+                            <div class="card" data-toggle="modal" data-target="#exampleModalLive" position-id ="{{ position.id }}" >
+                                    <div class="card-img-top img-responsive" style= "background-color: #{{ position.color }};">
                                         <img src="/media/{{ position.logo }}">
                                     </div>
                                     <div class="card-block">
                                          <h4 class="card-title">{{ position.job_title }}</h4>
                                             <h6 class="card-subtitle text-muted">{{ position.city }}, {{ position.state }}</h6>
                                                 <p class="card-text">{{ position.description }}</p>
-                                                <p class="card-text text-center"><small class="text-muted">Click for info</small></p>
                                     </div>
+                                    <p class="card-text text-center"><small class="text-muted">Click for info</small></p>
                             </div>
                     {% endfor %}
             </div>
@@ -34,36 +40,34 @@
             <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <div class="modal-header" style="background-color: #3B5998; height: 100px;">
-                            <img src="/media/images/positions/Facebook.png">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                        <div class="modal-header">
                         </div>
                         <div class="modal-body">
-                            <div class="card-block">
-                                <h2 class="card-title">Test Job</h2>
-                                <h4 class="card-subtitle text-muted">New York, NY</h4>
-                                <p class="card-text">Nininiininini</p>
-                            </div>
+
                         </div>
+
+                            <div class="card-text text-center">
+                                <a data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                                    <small class="text-muted"><i class="fa fa-chevron-up"></i>&emsp;Comments&emsp;<i class="fa fa-chevron-up"></i></small>
+                                </a>
+                            </div>
+                            <div class="collapse show" id="collapseExample"><div id = "comments"></div></div>
+
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <div class="card-block buttons">
+                            <button class="btn btn-inroad btn-round btn-lg" type="button" style = "margin-right: 2px;">
+                                learn more
+                            </button>
+                            <button class="btn btn-inroad-open btn-round btn-lg" type="button">
+                                see posting
+                            </button>
+                        </div>
+
                         </div>
                     </div>
+
                 </div>
             </div>
-            <script type="text/javascript">
-                  $('a.thumb').click(function(event){
-                    event.preventDefault();
-                    var content = $('.modal-body');
-                    content.empty();
-                    var title = $(this).attr("card-title");
-                    $('.modal-title').html(title);
-                    content.html($(this).html());
-                    $(".modal-profile").modal({show:true});
-                });
-            </script>
+
 	<!-- //.modal-profile -->
     {% endblock %}
