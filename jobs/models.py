@@ -40,6 +40,7 @@ class Position(models.Model):
 
 class Board(models.Model):
     author = models.ForeignKey(User)
+    wish = models.BooleanField(default=False)
     title = models.CharField(max_length=200, blank=False, null=False)
     description = models.CharField(max_length=1000, null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -50,7 +51,6 @@ class Board(models.Model):
 
 class Comment(models.Model):
     position = models.ForeignKey(Position, related_name="Comments")
-    author = models.ForeignKey(User)
     board = models.ForeignKey(Board, default=False)
     text = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)

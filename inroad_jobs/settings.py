@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = '-2ckaej0hbd!+9s-%h5y(c9+^mt8ukkfk_h+rk5mjkhdescwmz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -65,6 +65,7 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
+
 ROOT_URLCONF = 'inroad_jobs.urls'
 
 TEMPLATES = [
@@ -87,9 +88,37 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.linkedin.LinkedinOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+# LinkedIn Fields
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '771dpd0zeujfia'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'U7lEvvQvRGUk1xI8'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_basicprofile', 'r_emailaddress', 'w_share']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['id',
+                                               'email-address',
+                                               'first-name',
+                                               'last-name',
+                                               'formatted-name',
+                                               'headline',
+                                               'location',
+                                               'industry']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [  ('id', 'id'),
+                                            ('firstName', 'first_name'),
+                                            ('lastName', 'last_name'),
+                                            ('summary', 'summary'),
+                                            ('emailAddress', 'email_address'),
+                                            ('headline', 'headline'),
+                                            ('positions', 'positions'),
+                                            ('industry', 'industry'),
+                                            ('educations', 'educations')]
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home'
 
 WSGI_APPLICATION = 'inroad_jobs.wsgi.application'
 
@@ -141,11 +170,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'home'
-SOCIAL_AUTH_FACEBOOK_KEY = ''
-SOCIAL_AUTH_FACEBOOK_SECRET = ''
+
 
 #Static routing
 STATICFILES_DIRS = (BASE_DIR, 'static')

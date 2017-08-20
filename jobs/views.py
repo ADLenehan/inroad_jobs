@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404, get_list_or_404
 from jobs.forms import PositionForm, CommentForm
-from jobs.models import Position, Company, Comment
+from jobs.models import Position, Board, Comment
 import requests, json, grequests, pprint
 from django.contrib.auth import logout as auth_logout
 from django.http import HttpResponseRedirect, JsonResponse
@@ -18,8 +18,10 @@ def home(request):
     json_txts = []
 
     try:
+        #board = Board.objects.filter(author=request.user)
+        #positions = Position.objects.filter(board=board)
         positions = Position.objects.all()
-        companies = Company.objects.all()
+
 
         for position in positions:
             if position.indeed_id:
