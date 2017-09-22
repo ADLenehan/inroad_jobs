@@ -1,9 +1,8 @@
 import re
-
 from django import template
-
 from social_core.backends.oauth import OAuthAuth
-
+from django.template.defaultfilters import stringfilter
+import json, pprint
 
 register = template.Library()
 
@@ -79,3 +78,6 @@ def associated(context, backend):
         except IndexError:
             pass
     return ''
+
+
+

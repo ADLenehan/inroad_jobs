@@ -19,8 +19,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-2ckaej0hbd!+9s-%h5y(c9+^mt8ukkfk_h+rk5mjkhdescwmz'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -95,8 +94,7 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 # LinkedIn Fields
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '771dpd0zeujfia'
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'U7lEvvQvRGUk1xI8'
+
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_basicprofile', 'r_emailaddress', 'w_share']
 SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['id',
                                                'email-address',
@@ -105,7 +103,11 @@ SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['id',
                                                'formatted-name',
                                                'headline',
                                                'location',
-                                               'industry']
+                                               'industry',
+                                               'positions',
+                                               'educations',
+                                               'pictureUrl',
+                                               'publicProfileUrl']
 SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [  ('id', 'id'),
                                             ('firstName', 'first_name'),
                                             ('lastName', 'last_name'),
@@ -114,7 +116,31 @@ SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [  ('id', 'id'),
                                             ('headline', 'headline'),
                                             ('positions', 'positions'),
                                             ('industry', 'industry'),
-                                            ('educations', 'educations')]
+                                            ('educations', 'educations'),
+                                            ('pictureUrl','picture_url'),
+                                            ('publicProfileUrl','public_profile_url')]
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.mail.mail_validation',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.debug.debug',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+SOCIAL_AUTH_DISCONNECT_PIPELINE = (
+    'social_core.pipeline.disconnect.allowed_to_disconnect',
+    'social_core.pipeline.disconnect.get_entries',
+    'social_core.pipeline.disconnect.revoke_tokens',
+    'social_core.pipeline.disconnect.disconnect',
+)
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'

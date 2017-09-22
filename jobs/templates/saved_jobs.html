@@ -1,0 +1,31 @@
+{% extends 'layouts/frontend.html' %}
+    {% block title_block %}
+        Saved Jobs
+    {% endblock %}
+    {% block main_content %}
+        {% if positions %}
+            <div class = card-columns>
+                {% for position in positions %}
+                            <div class="card job-card" position-id ="{{ position.id }}" >
+                                    <div class="card-img-top img-responsive" style= "background-color: #{{ position.color }};">
+                                        <img src="/media/{{ position.logo }}">
+                                    </div>
+                                    <div class="card-block">
+                                         <h4 class="card-title">{{ position.job_title }}</h4>
+                                            <h6 class="card-subtitle text-muted">{{ position.city }}, {{ position.state }}</h6>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="card-block buttons">
+                                            <a href = "{% url 'apply' pk=position.pk %}"><button class="btn btn-inroad" type="button" style = "margin-right: 2px;">
+                                                Get Intro
+                                            </button></a>
+                                            <a href = "/{{ position.id }}/unsave_job"><button class='btn btn-inroad-red' type='button' style = 'margin-right: 2px;'>Unsave</button></a>
+                                        </div>
+                                    </div>
+                            </div>
+                    {% endfor %}
+            </div>
+        {% endif %}
+
+	<!-- //.modal-profile -->
+    {% endblock %}

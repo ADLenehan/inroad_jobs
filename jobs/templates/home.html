@@ -3,37 +3,32 @@
         Home
     {% endblock %}
     {% block main_content %}
-        <br>
-        <div class="btn-group" role="group" aria-label="...">
-            <button type="button" class="btn btn-secondary">Left</button>
-            <button type="button" class="btn btn-secondary">Middle</button>
-            <button type="button" class="btn btn-secondary">Right</button>
-        </div>
-        <br><br>
+        {% if board %}
+            {% with board|first as board %}
+            <h2>{{ board.title }}</h2>
+            <h3>{{ board.description}}</h3>
+            <h4><a href="{% url 'add_position' board_name=board.slug %}">Add a New Position</a> </h4>
+            <h4><a href="{% url 'add_board' %}">Add a New Board</a><br /></h4>
+            {% endwith %}
+        {% endif %}
         {% if positions %}
             <div class = card-columns>
                 {% for position in positions %}
-                            <div class="card" data-toggle="modal" data-target="#exampleModalLive" position-id ="{{ position.id }}" >
-                                    <div class="card-img-top img-responsive" style= "background-color: #{{ position.color }};">
-                                        <img src="/media/{{ position.logo }}">
-                                    </div>
-                                    <div class="card-block">
-                                         <h4 class="card-title">{{ position.job_title }}</h4>
-                                            <h6 class="card-subtitle text-muted">{{ position.city }}, {{ position.state }}</h6>
-                                                <p class="card-text">{{ position.description }}</p>
-                                    </div>
-                                    <p class="card-text text-center"><small class="text-muted">Click for info</small></p>
-                            </div>
-                    {% endfor %}
+                    <div class="card job-card job-mag" data-toggle="modal" data-target="#exampleModalLive" position-id ="{{ position.id }}" >
+                        <div class="card-img-top img-responsive" style= "background-color: #{{ position.color }};">
+                            <img src="/media/{{ position.logo }}">
+                        </div>
+                        <div class="card-block">
+                            <h4 class="card-title">{{ position.job_title }}</h4>
+                            <h6 class="card-subtitle text-muted">{{ position.city }}, {{ position.state }}</h6>
+                            <p class="card-text">{{ position.description }}</p>
+                        </div>
+                        <p class="card-text text-center"><small class="text-muted">Click for info</small></p>
+                    </div>
+                {% endfor %}
             </div>
         {% endif %}
-        {% if user.is_authenticated %}
-            <p>Hello {{ user.username }}!</p>
-            <a href="{% url 'add_position' %}">Add a New Position</a><br />
-        {% else %}
-            <a href="{% url "social:begin" "linkedin-oauth2" %}">LinkedIn</a>
-            <p>You have not been authenticated</p>
-        {% endif %}
+
             <span id="indeed_at"><a title="Job Search" href="https://www.indeed.com" rel="nofollow" >jobs by <img alt=Indeed src="https://www.indeed.com/p/jobsearch.gif" style="border: 0; vertical-align: middle;"></a></span>
 
             <!-- .modal-profile -->
@@ -43,24 +38,18 @@
                         <div class="modal-header">
                         </div>
                         <div class="modal-body">
-
                         </div>
-
-                            <div class="card-text text-center">
-                                <a data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
-                                    <small class="text-muted"><i class="fa fa-chevron-up"></i>&emsp;Comments&emsp;<i class="fa fa-chevron-up"></i></small>
-                                </a>
-                            </div>
-                            <div class="collapse show" id="collapseExample"><div id = "comments"></div></div>
-
+                        <div id="comments"></div>
                         <div class="modal-footer">
                             <div class="card-block buttons">
-                            <button class="btn btn-inroad btn-round btn-lg" type="button" style = "margin-right: 2px;">
-                                learn more
-                            </button>
-                            <button class="btn btn-inroad-open btn-round btn-lg" type="button">
-                                see posting
-                            </button>
+                                    <a href = ""><button class="btn btn-inroad" type="button" style = "margin-right: 2px;">
+                                        Get Intro
+                                    </button></a>
+                                    <span id="modal-buttons"></span>
+                                    <a href = ""><button class="btn btn-inroad-open posting-link" type="button">
+                                    See Posting
+                                    </button></a>
+                            </div>
                         </div>
 
                         </div>

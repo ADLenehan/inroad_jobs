@@ -3,14 +3,19 @@
         Add Comment
     {% endblock %}
     {% block main_content %}
+    <div class="card w-75 mx-auto animated fadeInRight" >
         <form id = "comment_form" method = "post">
             {% csrf_token %}
             <input type='hidden' name='comment_id' value='{{ comment_id }}'>
             {% if comment.non_field_errors %}
                     {{ comment_form.non_field_errors.as_text }}
             {% endif %}
+            <p>Company: {{ comment_form.company }}</p>
+            <p>User position: {{ comment_form.user_position }}</p>
+            <p>Picture URL: {{ comment_form.picture_url }}</p>
             <p>Text: {{ comment_form.text }}</p>
-            <button type="submit" name="submit" value="Create Comment" />
+            <button type="submit" name="submit" value="Create Comment">Create comment</button>
         </form>
         <span id="indeed_at"><a title="Job Search" href="https://www.indeed.com" rel="nofollow" >jobs by <img alt=Indeed src="https://www.indeed.com/p/jobsearch.gif" style="border: 0; vertical-align: middle;"></a></span>
+    </div>
     {% endblock %}

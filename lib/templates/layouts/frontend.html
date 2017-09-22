@@ -1,15 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load user_utils %}
 {% include 'layouts/_head.html' %}
 {% block head %}{% endblock %}
 <body>
 
 
-<nav class="navbar navbar-light inroad-blue fixed-top">
-        <a class = "navbar-brand" href="{% url 'home' %}"><img src='/static/img/Inroad-white.png' style="height: 50px"></a>
-</nav>
-{% if user.is_authenticated %}
-{% endif %}
+        <nav class="navbar navbar-expand-md inroad-blue sticky-top">
+                <a class = "navbar-brand" href="{% url 'home' %}"><img src='/static/img/Inroad-white.png' style="height: 50px"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar7">
+                        <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse justify-content-stretch" id="navbar7">
+                        <ul class="navbar-nav ml-auto">
+                        {% if user.is_authenticated %}
+                                {% get_extra_data request as extra_data %}
+                                <li class="nav-item">
+                                        <a href="{% url 'saved_jobs' %}"><button class="btn btn-inroad-nav btn-round btn-lg" type="button">Saved Jobs</button></a>
+                                </li>
+                                <li class="nav-item">
+                                        <a href="{% url 'profile' %}"><button class="btn btn-inroad-nav btn-round btn-lg profile-pic" type="button"><img class = "nav-icon" src="{{ extra_data.picture_url }}">  Profile</button></a>
+                                </li>
+                        {% else %}
+                                <li class="nav-item">
+                                        <a href="{% url 'social:begin' backend='linkedin-oauth2' %}?user_id={{ user_id }}"><button class="btn btn-inroad-white btn-round btn-lg" type="button" style = "margin-right: 2px;">
+                                                Login w/ LinkedIn
+                                        </button></a>
+                                </li>
+                        {% endif %}
+                        </ul>
+                </div>
+        </nav>
+
 <div class="container">
 {% block main_content %}{% endblock %}
 </div>

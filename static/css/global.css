@@ -98,7 +98,19 @@ form {
 }
 
 .container {
-    padding-top: 80px !important;
+    padding-top: 20px !important;
+}
+
+.modal-dialog {
+    max-width: 800px;
+}
+
+.modal-footer {
+    max-width: 800px;
+}
+
+.modal-footer {
+    border-top: 0px solid #e9ecef;
 }
 
 /**************/
@@ -113,7 +125,7 @@ form {
   }
 }
 
-.card {
+.saved-card {
   background: #fff;
   border-radius: 5px;
   backface-visibility: hidden;
@@ -121,7 +133,18 @@ form {
   transform: scale(1.00);
 }
 
-.card:hover {
+.job-card {
+  background: #fff;
+  border-radius: 5px;
+}
+
+.job-mag {
+  backface-visibility: hidden;
+  transition: transform .15s linear;
+  transform: scale(1.00);
+}
+
+.job-mag:hover {
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
@@ -129,7 +152,7 @@ form {
   transform: scale(1.04);
 }
 
-.card:active {
+.job-mag:active {
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
@@ -153,17 +176,17 @@ form {
   }
 }
 
-.card-img-top img {
-  width:50%;
+.job-card > .card-img-top {
+    height: 60px;
+}
+
+.job-card > .card-img-top > img {
+  height:100%;
   display: block;
   margin:0 auto;
   padding-top: 10px;
   padding-bottom: 10px;
  }
-
-#comments > .card-block  {
-  border-top: 1px solid rgba(0, 0, 0, 0.125);
-}
 
 .card-block.buttons {
   padding: 0rem 1.25rem 0rem 1.25rem;
@@ -174,6 +197,34 @@ form {
 .card p {
   margin-top: 5px;
 }
+
+.card-block {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  padding: 1rem;
+}
+/**************/
+/* nav  */
+/************/
+
+.nav-icon {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    opacity: 1;
+    position: relative;
+    left: auto;
+    top: auto;
+    margin-left: 0;
+    -webkit-clip-path: none;
+    clip-path: none;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
 
 /**************/
 /* modals  */
@@ -248,6 +299,20 @@ form {
   opacity: 0.85;
 }
 
+.comment-block {
+  margin-top: 10px;
+  margin-right: 15px;
+  margin-left: 15px;
+  padding: 18px 15px 18px 15px;
+  border-radius: 5px;
+  background-color: #EDEDED;
+  font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.comment-block h5 {
+  margin-bottom: 3px;
+  color: #36D1C4;
+}
 
 .card-text .fa {
   transition: .3s transform ease-in-out;
@@ -264,7 +329,7 @@ form {
 
 .btn-inroad {
     background-color: #36D1C4;
-    padding: 25px 15px 23px 15px;
+    padding: 18px 15px 18px 15px;
     border-radius: 5px;
     color: #FFFFFF;
     font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -280,9 +345,28 @@ form {
     color: #FFFFFF
 }
 
+.btn-inroad-red {
+    background-color: #FF6349;
+    padding: 18px 15px 18px 15px;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    font-size: 1.25em;
+    line-height: .8em;
+    text-align: center;
+    border: 2px solid #36D1C4;
+}
+
+.btn-inroad-red:hover {
+    background-color: #D7543F;
+    border: 2px solid #D7543F;
+    color: #FFFFFF
+}
+
 .btn-inroad-open {
     background-color: #FFFFFF;
-    padding: 25px 15px 23px 15px;
+    padding: 18px 15px 18px 15px;
     border-radius: 5px;
     color: #36D1C4;
     font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -298,11 +382,57 @@ form {
     border-color: #30E8A5;
 }
 
+.btn-inroad-white {
+    background-color: transparent;
+    padding: 18px 15px 18px 15px;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    font-size: 1.25em;
+    line-height: .8em;
+    text-align: center;
+    border: 2px solid #FFFFFF;
+}
+
+.btn-inroad-white:hover {
+    background-color: #30E8A5;
+}
+
+.btn-inroad-nav {
+    background-color: transparent;
+    padding: 20px 15px 20px 15px;
+    color: #FFFFFF;
+    font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: 1.25em;
+    line-height: .8em;
+    text-align: center;
+}
+
+.btn-inroad-nav:hover {
+    background-color: #30E8A5;
+}
+
+.posting-link {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+}
+
+.profile-pic {
+    padding: 8px 15px 8px 15px;
+}
 
 
 /**************/
 /* frontend  */
 /************/
+
+.modal-open {
+  overflow: inherit;
+  padding-right: 0 !important;
+}
 
 .default-card {
     width: 350px;
@@ -360,27 +490,32 @@ form {
 .landing-background-color {
     background: #F3F3F3;
 }
+
 .footer {
     background-color: white;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
 }
 
 .footer-logo {
-    height: 20px;
+    height: 40px;
     margin-top: 10px;
     padding-left: 15px;
 }
 
 .footer h2 {
 	font-size: 15px;
+	font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	line-height: 27px;
-	padding: 15px 0 0px;
+	padding: 5px 0 0px;
 }
 
 .footer h3 {
-	color: #FB624A;
+	color: #36D1C4;
+	font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 18px;
 	line-height: 27px;
-	padding: 10px 0 0px;
+	padding: 5px 0 0px;
 }
 
 .footer ul {

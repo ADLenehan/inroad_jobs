@@ -1,0 +1,14 @@
+{% extends 'layouts/frontend.html' %}
+    {% block title_block %}
+        Profile
+    {% endblock %}
+    {% block main_content %}
+        <div >
+        <div class="card w-75 mx-auto animated fadeInRight" >
+            here is some text
+
+            <a href = "{% url 'logout' %}"<button class="btn btn-inroad-red btn-round btn-lg" style = "margin-right: 2px;">
+                        Logout
+                    </button></a>
+        </div>
+    {% endblock %}

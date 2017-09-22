@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404, get_list_or_404
-from jobs.forms import PositionForm, CommentForm
-from jobs.models import Position, Board, Comment
+from django.forms.models import model_to_dict
+from jobs.forms import PositionForm, CommentForm, BoardForm, ApplicationForm
+from jobs.models import Position, Board, Comment, SavedJobs, Company, Application
 import requests, json, grequests, pprint
 from django.contrib.auth import logout as auth_logout
 from django.http import HttpResponseRedirect, JsonResponse
@@ -9,19 +11,41 @@ from django.http import HttpResponse
 from lib.api import indeed
 
 
+@staff_member_required()
+@login_required
+def add_position(request, board_name):
+    form = PositionForm()
+    board_id = Board.objects.filter(slug=board_name)[0]
+    new_position = Position(board=board_id)
+
+    if request.method == 'POST':
+        form = PositionForm(request.POST, instance= new_position)
+
+        if form.is_valid():
+            position = form.save(commit=True)
+            return redirect('add_comment', board_name=board_id.slug,pk=position.pk)
+        else:
+            print(form.errors)
+
+    return render(request, 'add_position.html', {'position_form': form})
+
+
 def home(request):
+    return redirect('/NY-tech/board')
+
+
+def board(request, board_name):
 
     context_dict = {}
     job_counter = 0
     job_ids = ""
     reqs = []
     json_txts = []
+    board_array = Board.objects.filter(slug=board_name)
+    context_dict["board"] = board_array
 
     try:
-        #board = Board.objects.filter(author=request.user)
-        #positions = Position.objects.filter(board=board)
-        positions = Position.objects.all()
-
+        positions = Position.objects.filter(board=board_array[0].pk)
 
         for position in positions:
             if position.indeed_id:
@@ -49,13 +73,13 @@ def home(request):
             position.logo = position.company.logo
             position.color = position.company.color
             position.company_name = position.company.name
-            if position.indeed_id and flat_list[position.indeed_id]:
+            try:
                 position.job_title = flat_list[position.indeed_id]['jobtitle']
                 position.city = flat_list[position.indeed_id]['city']
                 position.state = flat_list[position.indeed_id]['state']
                 position.description = flat_list[position.indeed_id]['snippet']
                 position.url = flat_list[position.indeed_id]['url']
-            elif position.indeed_id and not flat_list[position.indeed_id]:
+            except KeyError:
                 del position
             else:
                 pass
@@ -73,48 +97,148 @@ def search(request):
     return render(request, "search.html")
 
 
+@staff_member_required()
 @login_required
-def add_position(request):
-    form = PositionForm()
+def add_board(request):
+    form = BoardForm()
 
     if request.method == 'POST':
-        form = PositionForm(request.POST)
+        form = BoardForm(request.POST)
 
         if form.is_valid():
-            position = form.save(commit=True)
-            return redirect('add_comment', position.pk)
+            board = form.save(commit=True)
+            board.author = request.user
+            board.save()
+            return redirect('home')
         else:
             print(form.errors)
 
-    return render(request, 'add_position.html', {'position_form': form})
+    return render(request, 'add_board.html', {'board_form': form})
 
+
+@staff_member_required()
 @login_required
-def add_comment(request, pk):
+def add_comment(request, board_name, pk):
     form = CommentForm()
-    position = get_object_or_404(Position, pk=pk)
+    position = Position.objects.get(pk=pk)
+    new_comment = Comment(position=position)
 
     if request.method == "POST":
         form = CommentForm(request.POST)
 
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.position = position
-            comment.save()
+            form.save(commit=True)
             return redirect('home')
         else:
-            form = CommentForm()
+            print(form.errors)
 
     return render(request,'add_comment.html', {'comment_form': form})
 
 
-def comments(request, pk):
-
+def comments(request, board_name, pk):
+    data = dict()
+    saved = False
+    position = Position.objects.get(pk=pk)
     try:
-        comments_obj = Comment.objects.filter(position=pk).order_by('created_on').values('author','text')
-
+        comments_obj = Comment.objects.get(position=pk)
+        data['comments'] = (model_to_dict(comments_obj))
     except Comment.DoesNotExist:
-        comments_obj = None
+        data['comments'] = False
 
-    return JsonResponse({'results': list(comments_obj)})
+    saved_jobs = SavedJobs.objects.filter(user=request.user)
+    for job_obj in saved_jobs:
+        if job_obj.position == position and job_obj.active == True:
+            saved = True
+            break
+    data['saved']=saved
+
+    return JsonResponse(data)
+
+
+@login_required(login_url='/')
+def save_job(request, pk):
+    position = Position.objects.get(pk=pk)
+    obj, created = SavedJobs.objects.update_or_create(user = request.user, position = position, defaults={"active": True})
+    return redirect('board',board_name='NY-tech')
+
+
+@login_required(login_url='/')
+def unsave_job(request, pk):
+    position = Position.objects.get(pk=pk)
+    job = SavedJobs.objects.get(user = request.user, position = position)
+    job.active=False
+    job.save()
+    return redirect('board', board_name='NY-tech')
+
+
+@login_required(login_url='/')
+def saved_jobs(request):
+
+    positions = []
+    context_dict = {}
+    job_counter = 0
+    job_ids = ""
+    reqs = []
+    json_txts = []
+
+    jobs = SavedJobs.objects.filter(user=request.user, active=True)
+
+    for job in jobs:
+        position = Position.objects.get(pk=job.position.pk)
+        positions.append(position)
+        if position.indeed_id:
+            job_ids += position.indeed_id+","
+            job_counter += 1
+            if job_counter == 100:
+                job_counter = 0
+                reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
+                         + job_ids + '&v=2&format=json')
+
+    reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
+                    + job_ids + '&v=2&format=json')
+    rs = (grequests.get(u) for u in reqs)
+    responses = grequests.map(rs)
+
+    json = [response.json() for response in responses]
+
+    for j in json:
+        json_txts.append(j['results'])
+        flat_list = {item['jobkey'] : item for sublist in json_txts for item in sublist}
+
+
+        for pos in positions:
+            pos.logo = pos.company.logo
+            pos.color = pos.company.color
+            pos.company_name = pos.company.name
+            try:
+                pos.job_title = flat_list[pos.indeed_id]['jobtitle']
+                pos.city = flat_list[pos.indeed_id]['city']
+                pos.state = flat_list[pos.indeed_id]['state']
+                pos.description = flat_list[pos.indeed_id]['snippet']
+                pos.url = flat_list[pos.indeed_id]['url']
+            except KeyError:
+                del pos
+            else:
+                pass
+
+        context_dict['positions'] = positions
+    return render(request, 'saved_jobs.html', context_dict)
+
+
+@login_required
+def apply(request, pk):
+    form = ApplicationForm()
+    position = Position.objects.get(pk=pk)
+    application = Application(user=request.user, position=position)
+
+    if request.method == "POST":
+        form = ApplicationForm(request.POST, instance=application)
+
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('saved_jobs')
+        else:
+            print(form.errors)
+
+    return render(request,'application.html', {'application_form': form})
 

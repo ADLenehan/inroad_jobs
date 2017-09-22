@@ -5,7 +5,7 @@
     {% block main_content %}
         <div >
         <div class="card w-75 mx-auto animated fadeInRight" >
-            <form id = "position_form" method = "post" action = {% url 'add_position' %}>
+            <form id = "position_form" method = "post">
                 <h1 class="card-title">Add an open position: </h1>
                 {% csrf_token %}
                     <input type='hidden' name='position_id' value='{{ position_id }}'>
