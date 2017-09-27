@@ -13,13 +13,16 @@
                                     <div class="card-block">
                                          <h4 class="card-title">{{ position.job_title }}</h4>
                                             <h6 class="card-subtitle text-muted">{{ position.city }}, {{ position.state }}</h6>
+                                        {% if position.applied is True %}
+                                            <i class="fa fa-check-circle" aria-hidden="true"></i> Applied
+                                        {% endif %}
                                     </div>
                                     <div class="modal-footer">
                                         <div class="card-block buttons">
-                                            <a href = "{% url 'apply' pk=position.pk %}"><button class="btn btn-inroad" type="button" style = "margin-right: 2px;">
+                                            <a href = "{% url 'apply' pk=position.pk %}"><button class="btn btn-inroad saved" type="button" style = "margin-right: 2px;">
                                                 Get Intro
                                             </button></a>
-                                            <a href = "/{{ position.id }}/unsave_job"><button class='btn btn-inroad-red' type='button' style = 'margin-right: 2px;'>Unsave</button></a>
+                                            <a href = "/{{ position.id }}/unsave_job"><button class='btn btn-inroad-red saved' type='button' style = 'margin-right: 2px;'>Unsave</button></a>
                                         </div>
                                     </div>
                             </div>

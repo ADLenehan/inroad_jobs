@@ -4,11 +4,12 @@ from django.shortcuts import render, render_to_response, redirect, get_object_or
 from django.forms.models import model_to_dict
 from jobs.forms import PositionForm, CommentForm, BoardForm, ApplicationForm
 from jobs.models import Position, Board, Comment, SavedJobs, Company, Application
+from django.http import JsonResponse
+from django.core.mail import EmailMessage
+from django.shortcuts import redirect
+from django.template import Context
+from django.template.loader import get_template
 import requests, json, grequests, pprint
-from django.contrib.auth import logout as auth_logout
-from django.http import HttpResponseRedirect, JsonResponse
-from django.http import HttpResponse
-from lib.api import indeed
 
 
 @staff_member_required()
@@ -41,53 +42,58 @@ def board(request, board_name):
     job_ids = ""
     reqs = []
     json_txts = []
-    board_array = Board.objects.filter(slug=board_name)
+    try:
+        board_array = Board.objects.filter(slug=board_name)
+    except Board.DoesNotExist:
+        board_array = 0
+
     context_dict["board"] = board_array
 
-    try:
-        positions = Position.objects.filter(board=board_array[0].pk)
+    if board_array==0:
+        try:
+            positions = Position.objects.filter(board=board_array[0].pk)
 
-        for position in positions:
-            if position.indeed_id:
-                job_ids += position.indeed_id+","
-                job_counter += 1
+            for position in positions:
+                if position.indeed_id:
+                    job_ids += position.indeed_id+","
+                    job_counter += 1
 
-                if job_counter == 100:
-                    job_counter = 0
-                    reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
-                         + job_ids + '&v=2&format=json')
+                    if job_counter == 100:
+                        job_counter = 0
+                        reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
+                             + job_ids + '&v=2&format=json')
 
-        reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
-                    + job_ids + '&v=2&format=json')
-        rs = (grequests.get(u) for u in reqs)
-        responses = grequests.map(rs)
+            reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
+                        + job_ids + '&v=2&format=json')
+            rs = (grequests.get(u) for u in reqs)
+            responses = grequests.map(rs)
 
-        json = [response.json() for response in responses]
+            json = [response.json() for response in responses]
 
-        for j in json:
-            json_txts.append(j['results'])
+            for j in json:
+                json_txts.append(j['results'])
 
-        flat_list = {item['jobkey'] : item for sublist in json_txts for item in sublist}
+            flat_list = {item['jobkey'] : item for sublist in json_txts for item in sublist}
 
-        for position in positions:
-            position.logo = position.company.logo
-            position.color = position.company.color
-            position.company_name = position.company.name
-            try:
-                position.job_title = flat_list[position.indeed_id]['jobtitle']
-                position.city = flat_list[position.indeed_id]['city']
-                position.state = flat_list[position.indeed_id]['state']
-                position.description = flat_list[position.indeed_id]['snippet']
-                position.url = flat_list[position.indeed_id]['url']
-            except KeyError:
-                del position
-            else:
-                pass
+            for position in positions:
+                position.logo = position.company.logo
+                position.color = position.company.color
+                position.company_name = position.company.name
+                try:
+                    position.job_title = flat_list[position.indeed_id]['jobtitle']
+                    position.city = flat_list[position.indeed_id]['city']
+                    position.state = flat_list[position.indeed_id]['state']
+                    position.description = flat_list[position.indeed_id]['snippet']
+                    position.url = flat_list[position.indeed_id]['url']
+                except KeyError:
+                    del position
+                else:
+                    pass
 
-        context_dict['positions'] = positions
+            context_dict['positions'] = positions
 
-    except Position.DoesNotExist:
-        context_dict['positions'] = None
+        except Position.DoesNotExist:
+            context_dict['positions'] = None
 
     return render(request, 'home.html', context_dict)
 
@@ -139,6 +145,7 @@ def comments(request, board_name, pk):
     data = dict()
     saved = False
     position = Position.objects.get(pk=pk)
+    data['position'] = model_to_dict(position)
     try:
         comments_obj = Comment.objects.get(position=pk)
         data['comments'] = (model_to_dict(comments_obj))
@@ -185,6 +192,7 @@ def saved_jobs(request):
 
     for job in jobs:
         position = Position.objects.get(pk=job.position.pk)
+        position.applied = job.applied
         positions.append(position)
         if position.indeed_id:
             job_ids += position.indeed_id+","
@@ -204,7 +212,6 @@ def saved_jobs(request):
     for j in json:
         json_txts.append(j['results'])
         flat_list = {item['jobkey'] : item for sublist in json_txts for item in sublist}
-
 
         for pos in positions:
             pos.logo = pos.company.logo
@@ -229,16 +236,36 @@ def saved_jobs(request):
 def apply(request, pk):
     form = ApplicationForm()
     position = Position.objects.get(pk=pk)
+    obj, created = SavedJobs.objects.update_or_create(user = request.user, position = position, defaults={"active": True, "applied": True})
     application = Application(user=request.user, position=position)
 
-    if request.method == "POST":
+    if request.method == "POST" and request.user.is_authenticated():
         form = ApplicationForm(request.POST, instance=application)
+
 
         if form.is_valid():
             form.save(commit=True)
+            user_data = request.user.social_auth.get(provider='linkedin-oauth2').extra_data
+            question1 = request.POST.get('question1')
+            question2 = request.POST.get('question2')
+
+            template = get_template('add_position.txt')
+            context = Context({
+                'user_data': user_data,
+                'question1': question1,
+                'question2' : question2,
+            })
+            content = template.render(context)
+
+            email = EmailMessage(
+                "New application",
+                content,
+                'admin@inroad.co',
+                ['andrew@inroad.co'])
+            email.send()
             return redirect('saved_jobs')
+
         else:
             print(form.errors)
 
     return render(request,'application.html', {'application_form': form})
-

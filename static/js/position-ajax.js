@@ -31,6 +31,11 @@ $(document).ready(function() {
                             } else {
                             $('#modal-buttons').append("<a href = \"/"+position_id+"/unsave_job/\"><button class='btn btn-inroad-red' type='button' style = 'margin-right: 2px;'>Unsave</button></a>");
                          }
+                    } else if (key=='position'){
+                            $('#modal-buttons').append("<a href = \"/"+position_id+"/apply/\"><button class='btn btn-inroad' type='button' style = 'margin-right: 2px;'>Get Intro</button></a>");
+                                if (element.url) {
+                                    $('#modal-buttons').append("<a href = \""+element.url+"\"><button class='btn btn-inroad-open posting-link' type='button' style = 'margin-right: 2px;' target = \"_blank\">See Post</button></a>");
+                                    }
                     }
                 });
             },

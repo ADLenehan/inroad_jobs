@@ -424,6 +424,10 @@ form {
     padding: 8px 15px 8px 15px;
 }
 
+.saved {
+    line-height: .3em !important;
+}
+
 
 /**************/
 /* frontend  */

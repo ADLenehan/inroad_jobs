@@ -20,7 +20,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -94,7 +93,6 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 # LinkedIn Fields
-
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_basicprofile', 'r_emailaddress', 'w_share']
 SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['id',
                                                'email-address',
@@ -154,11 +152,14 @@ WSGI_APPLICATION = 'inroad_jobs.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': (os.path.join(BASE_DIR, 'db.sqlite3'))
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'inroaddb',
+        'USER': 'admin',
+        'PASSWORD': 'inroad_admin',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
