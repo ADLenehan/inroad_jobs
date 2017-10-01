@@ -3,12 +3,16 @@
         Profile
     {% endblock %}
     {% block main_content %}
-        <div >
-        <div class="card w-75 mx-auto animated fadeInRight" >
-            here is some text
-
-            <a href = "{% url 'logout' %}"<button class="btn btn-inroad-red btn-round btn-lg" style = "margin-right: 2px;">
+        <div class="card">
+            {% if extra_data %}
+                {{ extra_data.picture_url }}
+            {% endif %}
+            <div class="modal-footer">
+                <div class="card-block buttons">
+                <a href = "{% url 'logout' %}"<button class="btn btn-inroad-red btn-round btn-lg" style = "margin-right: 2px;">
                         Logout
                     </button></a>
+                </div>
+            </div>
         </div>
     {% endblock %}

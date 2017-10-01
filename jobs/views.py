@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404, get_list_or_404
 from django.forms.models import model_to_dict
+from django.core.exceptions import ObjectDoesNotExist
 from jobs.forms import PositionForm, CommentForm, BoardForm, ApplicationForm
 from jobs.models import Position, Board, Comment, SavedJobs, Company, Application
 from django.http import JsonResponse
@@ -42,14 +43,15 @@ def board(request, board_name):
     job_ids = ""
     reqs = []
     json_txts = []
+
     try:
         board_array = Board.objects.filter(slug=board_name)
-    except Board.DoesNotExist:
+    except ObjectDoesNotExist:
         board_array = 0
 
     context_dict["board"] = board_array
 
-    if board_array==0:
+    if board_array == 0:
         try:
             positions = Position.objects.filter(board=board_array[0].pk)
 

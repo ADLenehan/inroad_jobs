@@ -15,8 +15,11 @@ def login(request):
 
 @login_required(login_url='/')
 def profile(request):
-    return render(request, 'profile.html')
-
+    if request.user and request.user.is_authenticated():
+        user_data = request.user.social_auth.get(provider = 'linkedin-oauth2').extra_data
+        return render(request, 'profile.html', user_data)
+    else:
+        return ''
 
 @login_required(login_url='/')
 def home(request):

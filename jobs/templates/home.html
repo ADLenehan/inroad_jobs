@@ -3,15 +3,19 @@
         Home
     {% endblock %}
     {% block main_content %}
-        {% if board %}
+        {% if request.user.is_active and request.user.is_staff %}
+            <h4><a href="{% url 'add_board' %}">Add a New Board</a><br /></h4>
+        {% endif %}
+        {% if board|length > 0 %}
+        {% if request.user.is_active and request.user.is_staff %}
+            <h4><a href="{% url 'add_position' board_name=board.slug %}">Add a New Position</a> </h4>
+        {% endif %}
             {% with board|first as board %}
             <h2>{{ board.title }}</h2>
             <h3>{{ board.description}}</h3>
-            <h4><a href="{% url 'add_position' board_name=board.slug %}">Add a New Position</a> </h4>
-            <h4><a href="{% url 'add_board' %}">Add a New Board</a><br /></h4>
             {% endwith %}
         {% endif %}
-        {% if positions %}
+        {% if positions|length > 0 %}
             <div class = card-columns>
                 {% for position in positions %}
                     <div class="card job-card job-mag" data-toggle="modal" data-target="#exampleModalLive" position-id ="{{ position.id }}" >
