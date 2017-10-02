@@ -19,10 +19,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '771dpd0zeujfia'
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'U7lEvvQvRGUk1xI8'
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-2ckaej0hbd!+9s-%h5y(c9+^mt8ukkfk_h+rk5mjkhdescwmz'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
