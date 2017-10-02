@@ -3,7 +3,7 @@
         Add Board
     {% endblock %}
     {% block main_content %}
-    <div class="card w-75 mx-auto animated fadeInRight" >
+    <div class="card w-75 mx-auto" >
         <form id = "board_form" method = "post">
             {% csrf_token %}
             <input type='hidden' name='board_id' value='{{ board_id }}'>
