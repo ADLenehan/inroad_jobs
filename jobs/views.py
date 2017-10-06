@@ -45,57 +45,55 @@ def board(request, board_name):
     json_txts = []
 
     try:
-        board_array = Board.objects.filter(slug=board_name)
+        board_obj = Board.objects.get(slug=board_name)
+        context_dict["board"] = board_obj
     except ObjectDoesNotExist:
-        board_array = 0
+        return render(request, 'home.html', context_dict)
 
-    context_dict["board"] = board_array
+    try:
+        positions = Position.objects.filter(board=board_obj.pk)
 
-    if board_array == 0:
-        try:
-            positions = Position.objects.filter(board=board_array[0].pk)
+        for position in positions:
+            if position.indeed_id:
+                job_ids += position.indeed_id+","
+                job_counter += 1
 
-            for position in positions:
-                if position.indeed_id:
-                    job_ids += position.indeed_id+","
-                    job_counter += 1
+                if job_counter == 100:
+                    job_counter = 0
+                    reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
+                         + job_ids + '&v=2&format=json')
 
-                    if job_counter == 100:
-                        job_counter = 0
-                        reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
-                             + job_ids + '&v=2&format=json')
+        reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
+                    + job_ids + '&v=2&format=json')
+        rs = (grequests.get(u) for u in reqs)
+        responses = grequests.map(rs)
 
-            reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
-                        + job_ids + '&v=2&format=json')
-            rs = (grequests.get(u) for u in reqs)
-            responses = grequests.map(rs)
+        json = [response.json() for response in responses]
 
-            json = [response.json() for response in responses]
+        for j in json:
+            json_txts.append(j['results'])
 
-            for j in json:
-                json_txts.append(j['results'])
+        flat_list = {item['jobkey'] : item for sublist in json_txts for item in sublist}
 
-            flat_list = {item['jobkey'] : item for sublist in json_txts for item in sublist}
+        for position in positions:
+            position.logo = position.company.logo
+            position.color = position.company.color
+            position.company_name = position.company.name
+            try:
+                position.job_title = flat_list[position.indeed_id]['jobtitle']
+                position.city = flat_list[position.indeed_id]['city']
+                position.state = flat_list[position.indeed_id]['state']
+                position.description = flat_list[position.indeed_id]['snippet']
+                position.url = flat_list[position.indeed_id]['url']
+            except KeyError:
+                del position
+            else:
+                pass
 
-            for position in positions:
-                position.logo = position.company.logo
-                position.color = position.company.color
-                position.company_name = position.company.name
-                try:
-                    position.job_title = flat_list[position.indeed_id]['jobtitle']
-                    position.city = flat_list[position.indeed_id]['city']
-                    position.state = flat_list[position.indeed_id]['state']
-                    position.description = flat_list[position.indeed_id]['snippet']
-                    position.url = flat_list[position.indeed_id]['url']
-                except KeyError:
-                    del position
-                else:
-                    pass
+        context_dict['positions'] = positions
 
-            context_dict['positions'] = positions
-
-        except Position.DoesNotExist:
-            context_dict['positions'] = None
+    except Position.DoesNotExist:
+        context_dict['positions'] = None
 
     return render(request, 'home.html', context_dict)
 
@@ -114,9 +112,9 @@ def add_board(request):
         form = BoardForm(request.POST)
 
         if form.is_valid():
-            board = form.save(commit=True)
+            board = form.save(commit=False)
             board.author = request.user
-            board.save()
+            board.save(commit=True)
             return redirect('home')
         else:
             print(form.errors)
@@ -243,7 +241,6 @@ def apply(request, pk):
 
     if request.method == "POST" and request.user.is_authenticated():
         form = ApplicationForm(request.POST, instance=application)
-
 
         if form.is_valid():
             form.save(commit=True)

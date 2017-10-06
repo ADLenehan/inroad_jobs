@@ -38,7 +38,7 @@ class Board(models.Model):
     description = models.CharField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.slug
 
 
 class Position(models.Model):
