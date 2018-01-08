@@ -1,0 +1,2245 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.6.5
+-- Dumped by pg_dump version 9.6.5
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE auth_group (
+    id integer NOT NULL,
+    name character varying(80) NOT NULL
+);
+
+
+ALTER TABLE auth_group OWNER TO admin;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE auth_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_group_id_seq OWNER TO admin;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE auth_group_id_seq OWNED BY auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_group_permissions OWNER TO admin;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_group_permissions_id_seq OWNER TO admin;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE auth_group_permissions_id_seq OWNED BY auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE auth_permission OWNER TO admin;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE auth_permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_permission_id_seq OWNER TO admin;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE auth_permission_id_seq OWNED BY auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(150) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(30) NOT NULL,
+    email character varying(254) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE auth_user OWNER TO admin;
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_user_groups OWNER TO admin;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE auth_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_groups_id_seq OWNER TO admin;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE auth_user_groups_id_seq OWNED BY auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE auth_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_id_seq OWNER TO admin;
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE auth_user_id_seq OWNED BY auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_user_user_permissions OWNER TO admin;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE auth_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_user_permissions_id_seq OWNER TO admin;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE auth_user_user_permissions_id_seq OWNED BY auth_user_user_permissions.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id integer NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE django_admin_log OWNER TO admin;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE django_admin_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_admin_log_id_seq OWNER TO admin;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE django_admin_log_id_seq OWNED BY django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE django_content_type OWNER TO admin;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE django_content_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_content_type_id_seq OWNER TO admin;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE django_content_type_id_seq OWNED BY django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE django_migrations (
+    id integer NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE django_migrations OWNER TO admin;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE django_migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_migrations_id_seq OWNER TO admin;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE django_migrations_id_seq OWNED BY django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE django_session OWNER TO admin;
+
+--
+-- Name: jobs_application; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE jobs_application (
+    id integer NOT NULL,
+    question1 character varying(1000) NOT NULL,
+    question2 character varying(1000) NOT NULL,
+    checked boolean NOT NULL,
+    fit integer NOT NULL,
+    position_id integer NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE jobs_application OWNER TO admin;
+
+--
+-- Name: jobs_application_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE jobs_application_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE jobs_application_id_seq OWNER TO admin;
+
+--
+-- Name: jobs_application_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE jobs_application_id_seq OWNED BY jobs_application.id;
+
+
+--
+-- Name: jobs_board; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE jobs_board (
+    id integer NOT NULL,
+    title character varying(200) NOT NULL,
+    description character varying(1000),
+    author_id integer NOT NULL,
+    slug character varying(100) NOT NULL
+);
+
+
+ALTER TABLE jobs_board OWNER TO admin;
+
+--
+-- Name: jobs_board_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE jobs_board_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE jobs_board_id_seq OWNER TO admin;
+
+--
+-- Name: jobs_board_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE jobs_board_id_seq OWNED BY jobs_board.id;
+
+
+--
+-- Name: jobs_comment; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE jobs_comment (
+    id integer NOT NULL,
+    text text NOT NULL,
+    company character varying(200) NOT NULL,
+    user_position character varying(200) NOT NULL,
+    picture_url character varying(200),
+    position_id integer NOT NULL
+);
+
+
+ALTER TABLE jobs_comment OWNER TO admin;
+
+--
+-- Name: jobs_comment_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE jobs_comment_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE jobs_comment_id_seq OWNER TO admin;
+
+--
+-- Name: jobs_comment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE jobs_comment_id_seq OWNED BY jobs_comment.id;
+
+
+--
+-- Name: jobs_company; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE jobs_company (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    description character varying(1000) NOT NULL,
+    website character varying(200),
+    email_domain character varying(200),
+    logo character varying(100),
+    color character varying(6)
+);
+
+
+ALTER TABLE jobs_company OWNER TO admin;
+
+--
+-- Name: jobs_company_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE jobs_company_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE jobs_company_id_seq OWNER TO admin;
+
+--
+-- Name: jobs_company_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE jobs_company_id_seq OWNED BY jobs_company.id;
+
+
+--
+-- Name: jobs_experience; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE jobs_experience (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL
+);
+
+
+ALTER TABLE jobs_experience OWNER TO admin;
+
+--
+-- Name: jobs_experience_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE jobs_experience_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE jobs_experience_id_seq OWNER TO admin;
+
+--
+-- Name: jobs_experience_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE jobs_experience_id_seq OWNED BY jobs_experience.id;
+
+
+--
+-- Name: jobs_position; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE jobs_position (
+    id integer NOT NULL,
+    experience_id integer NOT NULL,
+    job_title character varying(1000),
+    description character varying(1000),
+    url character varying(125),
+    company_id integer NOT NULL,
+    city character varying(125),
+    indeed_id character varying(16),
+    state character varying(125),
+    created_on timestamp with time zone NOT NULL,
+    board_id integer NOT NULL
+);
+
+
+ALTER TABLE jobs_position OWNER TO admin;
+
+--
+-- Name: jobs_position_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE jobs_position_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE jobs_position_id_seq OWNER TO admin;
+
+--
+-- Name: jobs_position_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE jobs_position_id_seq OWNED BY jobs_position.id;
+
+
+--
+-- Name: jobs_savedjobs; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE jobs_savedjobs (
+    id integer NOT NULL,
+    applied boolean NOT NULL,
+    deleted boolean NOT NULL,
+    position_id integer NOT NULL,
+    user_id integer NOT NULL,
+    active boolean NOT NULL
+);
+
+
+ALTER TABLE jobs_savedjobs OWNER TO admin;
+
+--
+-- Name: jobs_savedjobs_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE jobs_savedjobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE jobs_savedjobs_id_seq OWNER TO admin;
+
+--
+-- Name: jobs_savedjobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE jobs_savedjobs_id_seq OWNED BY jobs_savedjobs.id;
+
+
+--
+-- Name: social_auth_association; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE social_auth_association (
+    id integer NOT NULL,
+    server_url character varying(255) NOT NULL,
+    handle character varying(255) NOT NULL,
+    secret character varying(255) NOT NULL,
+    issued integer NOT NULL,
+    lifetime integer NOT NULL,
+    assoc_type character varying(64) NOT NULL
+);
+
+
+ALTER TABLE social_auth_association OWNER TO admin;
+
+--
+-- Name: social_auth_association_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE social_auth_association_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE social_auth_association_id_seq OWNER TO admin;
+
+--
+-- Name: social_auth_association_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE social_auth_association_id_seq OWNED BY social_auth_association.id;
+
+
+--
+-- Name: social_auth_code; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE social_auth_code (
+    id integer NOT NULL,
+    email character varying(254) NOT NULL,
+    code character varying(32) NOT NULL,
+    verified boolean NOT NULL
+);
+
+
+ALTER TABLE social_auth_code OWNER TO admin;
+
+--
+-- Name: social_auth_code_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE social_auth_code_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE social_auth_code_id_seq OWNER TO admin;
+
+--
+-- Name: social_auth_code_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE social_auth_code_id_seq OWNED BY social_auth_code.id;
+
+
+--
+-- Name: social_auth_nonce; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE social_auth_nonce (
+    id integer NOT NULL,
+    server_url character varying(255) NOT NULL,
+    "timestamp" integer NOT NULL,
+    salt character varying(65) NOT NULL
+);
+
+
+ALTER TABLE social_auth_nonce OWNER TO admin;
+
+--
+-- Name: social_auth_nonce_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE social_auth_nonce_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE social_auth_nonce_id_seq OWNER TO admin;
+
+--
+-- Name: social_auth_nonce_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE social_auth_nonce_id_seq OWNED BY social_auth_nonce.id;
+
+
+--
+-- Name: social_auth_partial; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE social_auth_partial (
+    id integer NOT NULL,
+    token character varying(32) NOT NULL,
+    next_step smallint NOT NULL,
+    backend character varying(32) NOT NULL,
+    data text NOT NULL,
+    CONSTRAINT social_auth_partial_next_step_check CHECK ((next_step >= 0))
+);
+
+
+ALTER TABLE social_auth_partial OWNER TO admin;
+
+--
+-- Name: social_auth_partial_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE social_auth_partial_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE social_auth_partial_id_seq OWNER TO admin;
+
+--
+-- Name: social_auth_partial_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE social_auth_partial_id_seq OWNED BY social_auth_partial.id;
+
+
+--
+-- Name: social_auth_usersocialauth; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE social_auth_usersocialauth (
+    id integer NOT NULL,
+    provider character varying(32) NOT NULL,
+    uid character varying(255) NOT NULL,
+    extra_data text NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE social_auth_usersocialauth OWNER TO admin;
+
+--
+-- Name: social_auth_usersocialauth_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE social_auth_usersocialauth_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE social_auth_usersocialauth_id_seq OWNER TO admin;
+
+--
+-- Name: social_auth_usersocialauth_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE social_auth_usersocialauth_id_seq OWNED BY social_auth_usersocialauth.id;
+
+
+--
+-- Name: users_account; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE users_account (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    username character varying(255) NOT NULL,
+    email character varying(255) NOT NULL,
+    company_email character varying(255),
+    first_name character varying(50) NOT NULL,
+    last_name character varying(50) NOT NULL,
+    role character varying(200),
+    start_date date NOT NULL,
+    is_superuser boolean NOT NULL,
+    is_admin boolean NOT NULL,
+    is_staff boolean NOT NULL,
+    last_login timestamp with time zone,
+    active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL,
+    company_id integer
+);
+
+
+ALTER TABLE users_account OWNER TO admin;
+
+--
+-- Name: users_account_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE users_account_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE users_account_id_seq OWNER TO admin;
+
+--
+-- Name: users_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE users_account_id_seq OWNED BY users_account.id;
+
+
+--
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_group ALTER COLUMN id SET DEFAULT nextval('auth_group_id_seq'::regclass);
+
+
+--
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_permission ALTER COLUMN id SET DEFAULT nextval('auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: auth_user id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user ALTER COLUMN id SET DEFAULT nextval('auth_user_id_seq'::regclass);
+
+
+--
+-- Name: auth_user_groups id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user_groups ALTER COLUMN id SET DEFAULT nextval('auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: auth_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY django_admin_log ALTER COLUMN id SET DEFAULT nextval('django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY django_content_type ALTER COLUMN id SET DEFAULT nextval('django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY django_migrations ALTER COLUMN id SET DEFAULT nextval('django_migrations_id_seq'::regclass);
+
+
+--
+-- Name: jobs_application id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_application ALTER COLUMN id SET DEFAULT nextval('jobs_application_id_seq'::regclass);
+
+
+--
+-- Name: jobs_board id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_board ALTER COLUMN id SET DEFAULT nextval('jobs_board_id_seq'::regclass);
+
+
+--
+-- Name: jobs_comment id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_comment ALTER COLUMN id SET DEFAULT nextval('jobs_comment_id_seq'::regclass);
+
+
+--
+-- Name: jobs_company id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_company ALTER COLUMN id SET DEFAULT nextval('jobs_company_id_seq'::regclass);
+
+
+--
+-- Name: jobs_experience id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_experience ALTER COLUMN id SET DEFAULT nextval('jobs_experience_id_seq'::regclass);
+
+
+--
+-- Name: jobs_position id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_position ALTER COLUMN id SET DEFAULT nextval('jobs_position_id_seq'::regclass);
+
+
+--
+-- Name: jobs_savedjobs id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_savedjobs ALTER COLUMN id SET DEFAULT nextval('jobs_savedjobs_id_seq'::regclass);
+
+
+--
+-- Name: social_auth_association id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_association ALTER COLUMN id SET DEFAULT nextval('social_auth_association_id_seq'::regclass);
+
+
+--
+-- Name: social_auth_code id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_code ALTER COLUMN id SET DEFAULT nextval('social_auth_code_id_seq'::regclass);
+
+
+--
+-- Name: social_auth_nonce id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_nonce ALTER COLUMN id SET DEFAULT nextval('social_auth_nonce_id_seq'::regclass);
+
+
+--
+-- Name: social_auth_partial id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_partial ALTER COLUMN id SET DEFAULT nextval('social_auth_partial_id_seq'::regclass);
+
+
+--
+-- Name: social_auth_usersocialauth id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_usersocialauth ALTER COLUMN id SET DEFAULT nextval('social_auth_usersocialauth_id_seq'::regclass);
+
+
+--
+-- Name: users_account id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY users_account ALTER COLUMN id SET DEFAULT nextval('users_account_id_seq'::regclass);
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('auth_group_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add log entry	1	add_logentry
+2	Can change log entry	1	change_logentry
+3	Can delete log entry	1	delete_logentry
+4	Can add group	2	add_group
+5	Can change group	2	change_group
+6	Can delete group	2	delete_group
+7	Can add permission	3	add_permission
+8	Can change permission	3	change_permission
+9	Can delete permission	3	delete_permission
+10	Can add user	4	add_user
+11	Can change user	4	change_user
+12	Can delete user	4	delete_user
+13	Can add content type	5	add_contenttype
+14	Can change content type	5	change_contenttype
+15	Can delete content type	5	delete_contenttype
+16	Can add session	6	add_session
+17	Can change session	6	change_session
+18	Can delete session	6	delete_session
+19	Can add account	7	add_account
+20	Can change account	7	change_account
+21	Can delete account	7	delete_account
+22	Can add application	8	add_application
+23	Can change application	8	change_application
+24	Can delete application	8	delete_application
+25	Can add company	9	add_company
+26	Can change company	9	change_company
+27	Can delete company	9	delete_company
+28	Can add position	10	add_position
+29	Can change position	10	change_position
+30	Can delete position	10	delete_position
+31	Can add board	11	add_board
+32	Can change board	11	change_board
+33	Can delete board	11	delete_board
+34	Can add experience	12	add_experience
+35	Can change experience	12	change_experience
+36	Can delete experience	12	delete_experience
+37	Can add saved jobs	13	add_savedjobs
+38	Can change saved jobs	13	change_savedjobs
+39	Can delete saved jobs	13	delete_savedjobs
+40	Can add comment	14	add_comment
+41	Can change comment	14	change_comment
+42	Can delete comment	14	delete_comment
+43	Can add association	15	add_association
+44	Can change association	15	change_association
+45	Can delete association	15	delete_association
+46	Can add user social auth	16	add_usersocialauth
+47	Can change user social auth	16	change_usersocialauth
+48	Can delete user social auth	16	delete_usersocialauth
+49	Can add partial	17	add_partial
+50	Can change partial	17	change_partial
+51	Can delete partial	17	delete_partial
+52	Can add code	18	add_code
+53	Can change code	18	change_code
+54	Can delete code	18	delete_code
+55	Can add nonce	19	add_nonce
+56	Can change nonce	19	change_nonce
+57	Can delete nonce	19	delete_nonce
+\.
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('auth_permission_id_seq', 57, true);
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+2	pbkdf2_sha256$36000$j1E4xplqwWti$631P6pHCNTQBgL4lxLKMexTig7vRMVq96Za+s0+KGIg=	2017-10-01 13:52:22.912584-04	t	adlenehan			andrew@inroad.co	t	t	2017-10-01 13:52:08.303618-04
+1	!XQw3xi4WtF8Fg7kPOyPj5F1nI8utDEaPWxzOu4SX	2017-10-01 17:54:28.465927-04	t	AndrewLenehan	Andrew	Lenehan	andrew.lenehan@gmail.com	t	t	2017-10-01 13:39:32-04
+\.
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY auth_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('auth_user_id_seq', 2, true);
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+1	2017-10-01 13:52:47.173807-04	1	AndrewLenehan	2	[{"changed": {"fields": ["is_superuser"]}}]	4	2
+2	2017-10-05 15:31:31.291354-04	1	Blend	1	[{"added": {}}]	9	1
+3	2017-10-05 15:32:22.175842-04	2	Bowery	1	[{"added": {}}]	9	1
+4	2017-10-05 15:33:11.327765-04	3	Criteo	1	[{"added": {}}]	9	1
+5	2017-10-05 15:34:02.525143-04	4	Flatiron Health	1	[{"added": {}}]	9	1
+6	2017-10-05 15:34:59.2657-04	5	Index Exchange	1	[{"added": {}}]	9	1
+7	2017-10-05 15:36:00.944404-04	6	Justworks	1	[{"added": {}}]	9	1
+8	2017-10-05 15:53:44.573987-04	7	Pinterest	1	[{"added": {}}]	9	1
+9	2017-10-05 15:54:40.694279-04	8	Spotify	1	[{"added": {}}]	9	1
+10	2017-10-05 15:55:34.764498-04	9	Triplelift	1	[{"added": {}}]	9	1
+11	2017-10-05 15:57:27.807122-04	10	Triplemint	1	[{"added": {}}]	9	1
+12	2017-10-05 15:59:05.738387-04	11	Yext	1	[{"added": {}}]	9	1
+13	2017-10-05 16:49:26.601117-04	1	New Graduate	1	[{"added": {}}]	12	1
+14	2017-10-05 16:49:32.992341-04	2	2-5 Years	1	[{"added": {}}]	12	1
+15	2017-10-05 16:49:38.726047-04	3	5-7 Years	1	[{"added": {}}]	12	1
+16	2017-10-05 16:49:47.296461-04	4	7+Years	1	[{"added": {}}]	12	1
+17	2017-10-05 20:52:23.067383-04	12	AppNexus	1	[{"added": {}}]	9	1
+18	2017-10-05 21:28:59.285894-04	13	Datadog	1	[{"added": {}}]	9	1
+\.
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('django_admin_log_id_seq', 18, true);
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY django_content_type (id, app_label, model) FROM stdin;
+1	admin	logentry
+2	auth	group
+3	auth	permission
+4	auth	user
+5	contenttypes	contenttype
+6	sessions	session
+7	users	account
+8	jobs	application
+9	jobs	company
+10	jobs	position
+11	jobs	board
+12	jobs	experience
+13	jobs	savedjobs
+14	jobs	comment
+15	social_django	association
+16	social_django	usersocialauth
+17	social_django	partial
+18	social_django	code
+19	social_django	nonce
+\.
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('django_content_type_id_seq', 19, true);
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2017-10-01 13:39:25.446452-04
+2	auth	0001_initial	2017-10-01 13:39:25.515809-04
+3	admin	0001_initial	2017-10-01 13:39:25.544565-04
+4	admin	0002_logentry_remove_auto_add	2017-10-01 13:39:25.563497-04
+5	contenttypes	0002_remove_content_type_name	2017-10-01 13:39:25.592506-04
+6	auth	0002_alter_permission_name_max_length	2017-10-01 13:39:25.600162-04
+7	auth	0003_alter_user_email_max_length	2017-10-01 13:39:25.611843-04
+8	auth	0004_alter_user_username_opts	2017-10-01 13:39:25.626744-04
+9	auth	0005_alter_user_last_login_null	2017-10-01 13:39:25.637957-04
+10	auth	0006_require_contenttypes_0002	2017-10-01 13:39:25.639952-04
+11	auth	0007_alter_validators_add_error_messages	2017-10-01 13:39:25.649606-04
+12	auth	0008_alter_user_username_max_length	2017-10-01 13:39:25.664038-04
+13	default	0001_initial	2017-10-01 13:39:25.737167-04
+14	social_auth	0001_initial	2017-10-01 13:39:25.738752-04
+15	default	0002_add_related_name	2017-10-01 13:39:25.78487-04
+16	social_auth	0002_add_related_name	2017-10-01 13:39:25.786546-04
+17	default	0003_alter_email_max_length	2017-10-01 13:39:25.792769-04
+18	social_auth	0003_alter_email_max_length	2017-10-01 13:39:25.794643-04
+19	default	0004_auto_20160423_0400	2017-10-01 13:39:25.807094-04
+20	social_auth	0004_auto_20160423_0400	2017-10-01 13:39:25.808525-04
+21	social_auth	0005_auto_20160727_2333	2017-10-01 13:39:25.814954-04
+22	social_django	0006_partial	2017-10-01 13:39:25.826871-04
+23	jobs	0001_initial	2017-10-01 13:39:25.909025-04
+24	jobs	0002_auto_20170529_2016	2017-10-01 13:39:25.963376-04
+25	jobs	0003_auto_20170602_0051	2017-10-01 13:39:25.987869-04
+26	jobs	0004_auto_20170602_0226	2017-10-01 13:39:26.05687-04
+27	jobs	0005_remove_position_postal_code	2017-10-01 13:39:26.065519-04
+28	jobs	0006_auto_20170602_0343	2017-10-01 13:39:26.114477-04
+29	jobs	0007_auto_20170627_2116	2017-10-01 13:39:26.177013-04
+30	jobs	0008_auto_20170704_2258	2017-10-01 13:39:26.208959-04
+31	jobs	0009_auto_20170704_2315	2017-10-01 13:39:26.279035-04
+32	jobs	0010_auto_20170705_0038	2017-10-01 13:39:26.304739-04
+33	jobs	0011_auto_20170709_2246	2017-10-01 13:39:26.331205-04
+34	jobs	0012_board	2017-10-01 13:39:26.354037-04
+35	jobs	0013_comment_board	2017-10-01 13:39:26.378427-04
+36	jobs	0014_auto_20170820_1706	2017-10-01 13:39:26.41564-04
+37	jobs	0015_auto_20170829_0130	2017-10-01 13:39:26.487971-04
+38	jobs	0016_auto_20170902_1711	2017-10-01 13:39:26.614041-04
+39	jobs	0017_auto_20170902_1716	2017-10-01 13:39:26.647688-04
+40	jobs	0018_auto_20170902_1730	2017-10-01 13:39:26.663598-04
+41	jobs	0019_auto_20170902_1749	2017-10-01 13:39:26.683199-04
+42	jobs	0020_auto_20170902_2013	2017-10-01 13:39:26.724546-04
+43	jobs	0021_auto_20170902_2046	2017-10-01 13:39:26.762888-04
+44	jobs	0022_auto_20170902_2137	2017-10-01 13:39:26.779326-04
+45	jobs	0023_savedjobs	2017-10-01 13:39:26.804321-04
+46	jobs	0024_auto_20170908_0312	2017-10-01 13:39:26.826794-04
+47	jobs	0025_savedjobs_active	2017-10-01 13:39:26.846194-04
+48	jobs	0026_application	2017-10-01 13:39:26.873951-04
+49	sessions	0001_initial	2017-10-01 13:39:26.885051-04
+50	users	0001_initial	2017-10-01 13:39:26.915783-04
+51	social_django	0004_auto_20160423_0400	2017-10-01 13:39:26.920338-04
+52	social_django	0003_alter_email_max_length	2017-10-01 13:39:26.922183-04
+53	social_django	0005_auto_20160727_2333	2017-10-01 13:39:26.92433-04
+54	social_django	0002_add_related_name	2017-10-01 13:39:26.926023-04
+55	social_django	0001_initial	2017-10-01 13:39:26.92729-04
+\.
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('django_migrations_id_seq', 55, true);
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY django_session (session_key, session_data, expire_date) FROM stdin;
+v5kqf5ownk9k7efln7copc8jb952yxrv	NTIxYWI2NmZmYmE1ZGJhZDEwNjhhNTM4MWU2ZmVkMTAzOGM1OTdkNjp7InNvY2lhbF9hdXRoX2xhc3RfbG9naW5fYmFja2VuZCI6ImxpbmtlZGluLW9hdXRoMiIsIl9hdXRoX3VzZXJfYmFja2VuZCI6InNvY2lhbF9jb3JlLmJhY2tlbmRzLmxpbmtlZGluLkxpbmtlZGluT0F1dGgyIiwiX2F1dGhfdXNlcl9oYXNoIjoiMWZkZTg1NDhkMDdhYjEyZmU5ZDMxZGNlMGRmYTM2YzY3ZDUwZGE1YSIsImxpbmtlZGluLW9hdXRoMl9zdGF0ZSI6ImNlS3FSTFZaRzhFT3pXZXNLZVQ4dktNZ2xkS3I4RDBDIiwiX2F1dGhfdXNlcl9pZCI6IjEifQ==	2017-10-15 17:54:28.468204-04
+\.
+
+
+--
+-- Data for Name: jobs_application; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY jobs_application (id, question1, question2, checked, fit, position_id, user_id) FROM stdin;
+\.
+
+
+--
+-- Name: jobs_application_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('jobs_application_id_seq', 1, false);
+
+
+--
+-- Data for Name: jobs_board; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY jobs_board (id, title, description, author_id, slug) FROM stdin;
+2	Tech Jobs for Non-technologists	We've curated a list of jobs that don't require tech experience, and will introduce you to existing companies to learn more before applying.	1	NY-tech
+\.
+
+
+--
+-- Name: jobs_board_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('jobs_board_id_seq', 2, true);
+
+
+--
+-- Data for Name: jobs_comment; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY jobs_comment (id, text, company, user_position, picture_url, position_id) FROM stdin;
+\.
+
+
+--
+-- Name: jobs_comment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('jobs_comment_id_seq', 1, false);
+
+
+--
+-- Data for Name: jobs_company; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY jobs_company (id, name, description, website, email_domain, logo, color) FROM stdin;
+1	Blend	Better mortgage lending process	http://blend.com	blend.com	images/positions/Blend-white.png	1E4867
+2	Bowery	Indoor Farming	http://boweryfarming.com	boweryfarming.com	images/positions/Bowery-white.png	43C94E
+3	Criteo	Connecting shoppers to the things they need and love	http://criteo.com	criteo.com	images/positions/Criteo-white.png	FF8900
+4	Flatiron Health	Accelerating the fight against cancer	http://flatiron.com	flatiron.com	images/positions/Flatiron-white.png	1E8AFB
+5	Index Exchange	RTB ad exchange	http://indexexchange.com	indexexchange.com	images/positions/Index-white.png	124F8E
+6	Justworks	Simplifying office operations	http://justworks.com	justworks.com	images/positions/Justworks-white.png	1F89FB
+7	Pinterest	Discover recipes, home ideas, style inspiration and other ideas to try	http://pinterest.com	pinterest.com		DE0018
+8	Spotify	A music, podcast, and video streaming service	http://spotify.com	spotify.com	images/positions/Spotify-white.png	00DC4E
+9	Triplelift	Programmatic native advertising	http://triplelift.com	triplelift.com	images/positions/Triplelift-white.png	FF5C25
+10	Triplemint	The smartest way to buy, sell and rent your home	http://triplemint.com	triplemint.com	images/positions/Triplemint-white.png	06D79F
+11	Yext	Coordinates business listing information across services	http://yext.com	yext.com	images/positions/Yext-white.png	4A6477
+12	AppNexus	Leading independent ad exchange	http://appnexus.com	appnexus.com	images/positions/AppNexus_TBVMaxX.png	FF8700
+13	Datadog	See inside any stack, any app, at any scale, anywhere	http://datadoghq.com	datadoghq.com	images/positions/Datadog-white.png	8143AA
+\.
+
+
+--
+-- Name: jobs_company_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('jobs_company_id_seq', 13, true);
+
+
+--
+-- Data for Name: jobs_experience; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY jobs_experience (id, name) FROM stdin;
+1	New Graduate
+2	2-5 Years
+3	5-7 Years
+4	7+Years
+\.
+
+
+--
+-- Name: jobs_experience_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('jobs_experience_id_seq', 4, true);
+
+
+--
+-- Data for Name: jobs_position; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY jobs_position (id, experience_id, job_title, description, url, company_id, city, indeed_id, state, created_on, board_id) FROM stdin;
+1	2				1		94f324dc74fcd0ce		2017-10-05 16:50:38.913251-04	2
+2	1				10		9035d44d809bee38		2017-10-05 20:49:04.888553-04	2
+3	1				11		e982e88317e310bd		2017-10-05 20:49:57.912547-04	2
+4	3				12		dae50dd6756d6571		2017-10-05 20:53:15.797069-04	2
+5	2				6		3f72d7b43542e995		2017-10-05 20:54:57.2481-04	2
+6	2				8		93a2c00c5fdbc0fd		2017-10-05 21:02:48.989747-04	2
+7	3				8		a4f37925caf2ecea		2017-10-05 21:03:48.684012-04	2
+8	2				4		cadc7450c85779c3		2017-10-05 21:05:16.172123-04	2
+9	2				12		c2dc87d30c16d775		2017-10-05 21:08:46.490166-04	2
+10	2				11		5200f2d826019471		2017-10-05 21:09:41.592408-04	2
+11	3				11		98f57de7d319b3c0		2017-10-05 21:10:41.230715-04	2
+12	1				12		3ee277d49c493331		2017-10-05 21:11:24.896048-04	2
+13	2				4		185764f122c89b12		2017-10-05 21:13:34.224422-04	2
+14	1				4		0234691e8899338b		2017-10-05 21:14:41.607158-04	2
+15	2				3		4d2416ca2bc1fd8f		2017-10-05 21:16:25.147308-04	2
+16	1				12		981863b91b056df0		2017-10-05 21:17:14.60878-04	2
+17	1				12		cb0ab3095d3a4653		2017-10-05 21:18:56.207169-04	2
+18	1				6		ce2b7c00c9b3ed44		2017-10-05 21:19:52.600924-04	2
+19	1				6		ec0814e51257efb8		2017-10-05 21:20:42.896229-04	2
+20	2				11		6f3c16646d614eb7		2017-10-05 21:21:50.758906-04	2
+21	1				8		44b3e6203ef4999f		2017-10-05 21:22:37.15051-04	2
+22	2				3		944805049e0ae45e		2017-10-05 21:24:15.82554-04	2
+23	2				13		826b0987ff6f4d8c		2017-10-05 21:29:32.931959-04	2
+24	3				3		b2ed02cbde564580		2017-10-05 21:30:43.827506-04	2
+25	2				8		40d4c47cfeae9cc8		2017-10-05 21:32:08.076672-04	2
+26	2				11		fb7112cd2251e2d2		2017-10-05 21:34:26.782719-04	2
+27	1				13		4b72e480f8f3b9e0		2017-10-05 21:36:00.6391-04	2
+28	2				3		a826091ade198bdb		2017-10-05 21:37:03.596933-04	2
+29	2				6		047dc321c0c8912b		2017-10-05 21:38:14.002311-04	2
+30	2				13		f65e231e2da4c016		2017-10-05 21:38:57.5192-04	2
+\.
+
+
+--
+-- Name: jobs_position_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('jobs_position_id_seq', 30, true);
+
+
+--
+-- Data for Name: jobs_savedjobs; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY jobs_savedjobs (id, applied, deleted, position_id, user_id, active) FROM stdin;
+1	f	f	1	1	t
+\.
+
+
+--
+-- Name: jobs_savedjobs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('jobs_savedjobs_id_seq', 1, true);
+
+
+--
+-- Data for Name: social_auth_association; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY social_auth_association (id, server_url, handle, secret, issued, lifetime, assoc_type) FROM stdin;
+\.
+
+
+--
+-- Name: social_auth_association_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('social_auth_association_id_seq', 1, false);
+
+
+--
+-- Data for Name: social_auth_code; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY social_auth_code (id, email, code, verified) FROM stdin;
+\.
+
+
+--
+-- Name: social_auth_code_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('social_auth_code_id_seq', 1, false);
+
+
+--
+-- Data for Name: social_auth_nonce; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY social_auth_nonce (id, server_url, "timestamp", salt) FROM stdin;
+\.
+
+
+--
+-- Name: social_auth_nonce_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('social_auth_nonce_id_seq', 1, false);
+
+
+--
+-- Data for Name: social_auth_partial; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY social_auth_partial (id, token, next_step, backend, data) FROM stdin;
+\.
+
+
+--
+-- Name: social_auth_partial_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('social_auth_partial_id_seq', 1, false);
+
+
+--
+-- Data for Name: social_auth_usersocialauth; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY social_auth_usersocialauth (id, provider, uid, extra_data, user_id) FROM stdin;
+1	linkedin-oauth2	3v81QJq_EM	{"last_name": "Lenehan", "expires": 5183999, "educations": null, "token_type": null, "email_address": "andrew.lenehan@gmail.com", "id": "3v81QJq_EM", "public_profile_url": "https://www.linkedin.com/in/andrewlenehan", "first_name": "Andrew", "headline": "Building Digital Ad Marketplaces at AppNexus", "positions": {"_total": 2, "values": [{"startDate": {"year": 2016, "month": 9}, "title": "Senior Program Manager, Global Native Marketplace", "company": {"industry": "Internet", "size": "1001-5000", "type": "Privately Held", "id": 325130, "name": "AppNexus"}, "location": {"country": {"code": "us", "name": "United States"}, "name": "Greater New York City Area"}, "isCurrent": true, "id": 957742344}, {"startDate": {"year": 2015, "month": 7}, "title": "Manager, Publisher Consulting Services - North America", "company": {"industry": "Internet", "size": "1001-5000", "type": "Privately Held", "id": 325130, "name": "AppNexus"}, "location": {"country": {"code": "us", "name": "United States"}, "name": "Greater New York City Area"}, "isCurrent": true, "id": 690255831}]}, "industry": "Online Publishing", "picture_url": "https://media.licdn.com/mpr/mprx/0_76YCw4waMgaZy5qd7Gou57JagUxZJkXd_Bk2DSvf4U7JyqLNL6oC_4SaUwqJyzkzLBkG8OamKVOM0hhZ5vUY_2_CzVO40hTv5vUTeDn7ORINz9sddXDfHMZYv7XHnh9k290mf1x-zxT", "summary": null, "access_token": "AQVKWFgQHQZFJ6-9NTsVsTJteRAt1mTnn8Bspy6rN-bCM1xnCxUxDr6-9NCoh5Uw-qeD-Oatt4n7i0z9_MMLqeZJWhpDU3EHwn4iRJF_4aK7N07vKuE-wPqyU7N-TOPYXRputVJZW6b3XBaFsJ6GOluF6uqCTSyf2IH6l84g4treRaJ84ac", "auth_time": 1506894868}	1
+\.
+
+
+--
+-- Name: social_auth_usersocialauth_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('social_auth_usersocialauth_id_seq', 1, true);
+
+
+--
+-- Data for Name: users_account; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY users_account (id, password, username, email, company_email, first_name, last_name, role, start_date, is_superuser, is_admin, is_staff, last_login, active, date_joined, company_id) FROM stdin;
+\.
+
+
+--
+-- Name: users_account_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('users_account_id_seq', 1, false);
+
+
+--
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_0cd325b0_uniq UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_01ab375a_uniq UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups auth_user_groups_user_id_group_id_94350c0c_uniq; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_94350c0c_uniq UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_permission_id_14a6b632_uniq; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_14a6b632_uniq UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_76bd3d3b_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: jobs_application jobs_application_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_application
+    ADD CONSTRAINT jobs_application_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: jobs_board jobs_board_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_board
+    ADD CONSTRAINT jobs_board_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: jobs_board jobs_board_slug_key; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_board
+    ADD CONSTRAINT jobs_board_slug_key UNIQUE (slug);
+
+
+--
+-- Name: jobs_comment jobs_comment_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_comment
+    ADD CONSTRAINT jobs_comment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: jobs_company jobs_company_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_company
+    ADD CONSTRAINT jobs_company_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: jobs_experience jobs_experience_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_experience
+    ADD CONSTRAINT jobs_experience_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: jobs_position jobs_position_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_position
+    ADD CONSTRAINT jobs_position_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: jobs_savedjobs jobs_savedjobs_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_savedjobs
+    ADD CONSTRAINT jobs_savedjobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: social_auth_association social_auth_association_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_association
+    ADD CONSTRAINT social_auth_association_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: social_auth_association social_auth_association_server_url_handle_078befa2_uniq; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_association
+    ADD CONSTRAINT social_auth_association_server_url_handle_078befa2_uniq UNIQUE (server_url, handle);
+
+
+--
+-- Name: social_auth_code social_auth_code_email_code_801b2d02_uniq; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_code
+    ADD CONSTRAINT social_auth_code_email_code_801b2d02_uniq UNIQUE (email, code);
+
+
+--
+-- Name: social_auth_code social_auth_code_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_code
+    ADD CONSTRAINT social_auth_code_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: social_auth_nonce social_auth_nonce_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_nonce
+    ADD CONSTRAINT social_auth_nonce_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: social_auth_nonce social_auth_nonce_server_url_timestamp_salt_f6284463_uniq; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_nonce
+    ADD CONSTRAINT social_auth_nonce_server_url_timestamp_salt_f6284463_uniq UNIQUE (server_url, "timestamp", salt);
+
+
+--
+-- Name: social_auth_partial social_auth_partial_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_partial
+    ADD CONSTRAINT social_auth_partial_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: social_auth_usersocialauth social_auth_usersocialauth_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_usersocialauth
+    ADD CONSTRAINT social_auth_usersocialauth_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: social_auth_usersocialauth social_auth_usersocialauth_provider_uid_e6b5e668_uniq; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_usersocialauth
+    ADD CONSTRAINT social_auth_usersocialauth_provider_uid_e6b5e668_uniq UNIQUE (provider, uid);
+
+
+--
+-- Name: users_account users_account_company_email_key; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY users_account
+    ADD CONSTRAINT users_account_company_email_key UNIQUE (company_email);
+
+
+--
+-- Name: users_account users_account_email_key; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY users_account
+    ADD CONSTRAINT users_account_email_key UNIQUE (email);
+
+
+--
+-- Name: users_account users_account_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY users_account
+    ADD CONSTRAINT users_account_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_account users_account_username_key; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY users_account
+    ADD CONSTRAINT users_account_username_key UNIQUE (username);
+
+
+--
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX auth_group_name_a6ea08ec_like ON auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX auth_permission_content_type_id_2f476e4b ON auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: auth_user_groups_group_id_97559544; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX auth_user_groups_group_id_97559544 ON auth_user_groups USING btree (group_id);
+
+
+--
+-- Name: auth_user_groups_user_id_6a12ed8b; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX auth_user_groups_user_id_6a12ed8b ON auth_user_groups USING btree (user_id);
+
+
+--
+-- Name: auth_user_user_permissions_permission_id_1fbb5f2c; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX auth_user_user_permissions_permission_id_1fbb5f2c ON auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id_a95ead1b; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX auth_user_user_permissions_user_id_a95ead1b ON auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: auth_user_username_6821ab7c_like; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX auth_user_username_6821ab7c_like ON auth_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX django_admin_log_user_id_c564eba6 ON django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX django_session_expire_date_a5c62663 ON django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX django_session_session_key_c0390e0f_like ON django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: jobs_application_position_id_ac17d979; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX jobs_application_position_id_ac17d979 ON jobs_application USING btree (position_id);
+
+
+--
+-- Name: jobs_application_user_id_59477d51; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX jobs_application_user_id_59477d51 ON jobs_application USING btree (user_id);
+
+
+--
+-- Name: jobs_board_author_id_232b5f25; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX jobs_board_author_id_232b5f25 ON jobs_board USING btree (author_id);
+
+
+--
+-- Name: jobs_board_slug_ddb6d5dc_like; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX jobs_board_slug_ddb6d5dc_like ON jobs_board USING btree (slug varchar_pattern_ops);
+
+
+--
+-- Name: jobs_comment_position_id_9419d61a; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX jobs_comment_position_id_9419d61a ON jobs_comment USING btree (position_id);
+
+
+--
+-- Name: jobs_position_board_id_829aa9cc; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX jobs_position_board_id_829aa9cc ON jobs_position USING btree (board_id);
+
+
+--
+-- Name: jobs_position_company_id_1c0fac5f; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX jobs_position_company_id_1c0fac5f ON jobs_position USING btree (company_id);
+
+
+--
+-- Name: jobs_position_experience_id_64abcc68; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX jobs_position_experience_id_64abcc68 ON jobs_position USING btree (experience_id);
+
+
+--
+-- Name: jobs_savedjobs_position_id_5d9f67fd; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX jobs_savedjobs_position_id_5d9f67fd ON jobs_savedjobs USING btree (position_id);
+
+
+--
+-- Name: jobs_savedjobs_user_id_8f731a29; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX jobs_savedjobs_user_id_8f731a29 ON jobs_savedjobs USING btree (user_id);
+
+
+--
+-- Name: social_auth_code_code_a2393167; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX social_auth_code_code_a2393167 ON social_auth_code USING btree (code);
+
+
+--
+-- Name: social_auth_code_code_a2393167_like; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX social_auth_code_code_a2393167_like ON social_auth_code USING btree (code varchar_pattern_ops);
+
+
+--
+-- Name: social_auth_partial_token_3017fea3; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX social_auth_partial_token_3017fea3 ON social_auth_partial USING btree (token);
+
+
+--
+-- Name: social_auth_partial_token_3017fea3_like; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX social_auth_partial_token_3017fea3_like ON social_auth_partial USING btree (token varchar_pattern_ops);
+
+
+--
+-- Name: social_auth_usersocialauth_user_id_17d28448; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX social_auth_usersocialauth_user_id_17d28448 ON social_auth_usersocialauth USING btree (user_id);
+
+
+--
+-- Name: users_account_company_email_ae236490_like; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX users_account_company_email_ae236490_like ON users_account USING btree (company_email varchar_pattern_ops);
+
+
+--
+-- Name: users_account_company_id_072ebf8e; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX users_account_company_id_072ebf8e ON users_account USING btree (company_id);
+
+
+--
+-- Name: users_account_email_ac1c1254_like; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX users_account_email_ac1c1254_like ON users_account USING btree (email varchar_pattern_ops);
+
+
+--
+-- Name: users_account_username_89ce1ee2_like; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX users_account_username_89ce1ee2_like ON users_account USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_permission_id_84c5c92e_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_b120cbf9_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_2f476e4b_fk_django_co FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups auth_user_groups_group_id_97559544_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_97559544_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups auth_user_groups_user_id_6a12ed8b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_6a12ed8b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_c4bce8eb_fk_django_co FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jobs_application jobs_application_position_id_ac17d979_fk_jobs_position_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_application
+    ADD CONSTRAINT jobs_application_position_id_ac17d979_fk_jobs_position_id FOREIGN KEY (position_id) REFERENCES jobs_position(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jobs_application jobs_application_user_id_59477d51_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_application
+    ADD CONSTRAINT jobs_application_user_id_59477d51_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jobs_board jobs_board_author_id_232b5f25_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_board
+    ADD CONSTRAINT jobs_board_author_id_232b5f25_fk_auth_user_id FOREIGN KEY (author_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jobs_comment jobs_comment_position_id_9419d61a_fk_jobs_position_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_comment
+    ADD CONSTRAINT jobs_comment_position_id_9419d61a_fk_jobs_position_id FOREIGN KEY (position_id) REFERENCES jobs_position(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jobs_position jobs_position_board_id_829aa9cc_fk_jobs_board_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_position
+    ADD CONSTRAINT jobs_position_board_id_829aa9cc_fk_jobs_board_id FOREIGN KEY (board_id) REFERENCES jobs_board(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jobs_position jobs_position_company_id_1c0fac5f_fk_jobs_company_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_position
+    ADD CONSTRAINT jobs_position_company_id_1c0fac5f_fk_jobs_company_id FOREIGN KEY (company_id) REFERENCES jobs_company(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jobs_position jobs_position_experience_id_64abcc68_fk_jobs_experience_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_position
+    ADD CONSTRAINT jobs_position_experience_id_64abcc68_fk_jobs_experience_id FOREIGN KEY (experience_id) REFERENCES jobs_experience(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jobs_savedjobs jobs_savedjobs_position_id_5d9f67fd_fk_jobs_position_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_savedjobs
+    ADD CONSTRAINT jobs_savedjobs_position_id_5d9f67fd_fk_jobs_position_id FOREIGN KEY (position_id) REFERENCES jobs_position(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: jobs_savedjobs jobs_savedjobs_user_id_8f731a29_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY jobs_savedjobs
+    ADD CONSTRAINT jobs_savedjobs_user_id_8f731a29_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: social_auth_usersocialauth social_auth_usersocialauth_user_id_17d28448_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY social_auth_usersocialauth
+    ADD CONSTRAINT social_auth_usersocialauth_user_id_17d28448_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_account users_account_company_id_072ebf8e_fk_jobs_company_id; Type: FK CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY users_account
+    ADD CONSTRAINT users_account_company_id_072ebf8e_fk_jobs_company_id FOREIGN KEY (company_id) REFERENCES jobs_company(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
