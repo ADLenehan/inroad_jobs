@@ -25,11 +25,11 @@ def add_position(request, board_name):
 
         if form.is_valid():
             position = form.save(commit=True)
-            return redirect('add_comment', board_name=board_id.slug,pk=position.pk)
+            return redirect('jobs/add_comment', board_name=board_id.slug,pk=position.pk)
         else:
             print(form.errors)
 
-    return render(request, 'add_position.html', {'position_form': form})
+    return render(request, 'jobs/add_position.html', {'position_form': form})
 
 
 def home(request):
@@ -43,64 +43,61 @@ def board(request, board_name):
     job_ids = ""
     reqs = []
     json_txts = []
+    final_jobs =[]
 
     try:
         board_obj = Board.objects.get(slug=board_name)
         context_dict["board"] = board_obj
     except ObjectDoesNotExist:
-        return render(request, 'home.html', context_dict)
+        return render(request, 'jobs/home.html', context_dict)
 
     try:
         positions = Position.objects.filter(board=board_obj.pk)
 
         for position in positions:
             if position.indeed_id:
-                job_ids += position.indeed_id+","
-                job_counter += 1
+                reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
+                         + position.indeed_id + '&v=2&format=json')
 
-                if job_counter == 100:
-                    job_counter = 0
-                    reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
-                         + job_ids + '&v=2&format=json')
-
-        reqs.append('http://api.indeed.com/ads/apigetjobs?publisher=454906352828196&jobkeys='
-                    + job_ids + '&v=2&format=json')
         rs = (grequests.get(u) for u in reqs)
         responses = grequests.map(rs)
 
         json = [response.json() for response in responses]
 
         for j in json:
-            json_txts.append(j['results'])
+            if j['results']:
+                json_txts.append(j['results'])
 
         flat_list = {item['jobkey'] : item for sublist in json_txts for item in sublist}
 
         for position in positions:
-            position.logo = position.company.logo
-            position.color = position.company.color
-            position.company_name = position.company.name
+
             try:
                 position.job_title = flat_list[position.indeed_id]['jobtitle']
                 position.city = flat_list[position.indeed_id]['city']
                 position.state = flat_list[position.indeed_id]['state']
                 position.description = flat_list[position.indeed_id]['snippet']
                 position.url = flat_list[position.indeed_id]['url']
+                position.logo = position.company.logo
+                position.color = position.company.color
+                position.company_name = position.company.name
+                final_jobs.append(position)
             except KeyError:
-                del position
+                pass
             else:
                 pass
 
-        context_dict['positions'] = positions
+        context_dict['positions'] = final_jobs
 
     except Position.DoesNotExist:
         context_dict['positions'] = None
 
-    return render(request, 'home.html', context_dict)
+    return render(request, 'jobs/home.html', context_dict)
 
 
 @login_required
 def search(request):
-    return render(request, "search.html")
+    return render(request, "jobs/search.html")
 
 
 @staff_member_required()
@@ -109,17 +106,17 @@ def add_board(request):
     form = BoardForm()
 
     if request.method == 'POST':
-        form = BoardForm(request.POST)
+        form = BoardForm(request.POST, request.FILES)
 
         if form.is_valid():
             board = form.save(commit=False)
             board.author = request.user
-            board.save(commit=True)
-            return redirect('home')
+            board.save()
+            return render(request, 'jobs/home.html')
         else:
             print(form.errors)
 
-    return render(request, 'add_board.html', {'board_form': form})
+    return render(request, 'jobs/add_board.html', {'board_form': form})
 
 
 @staff_member_required()
@@ -134,11 +131,11 @@ def add_comment(request, board_name, pk):
 
         if form.is_valid():
             form.save(commit=True)
-            return redirect('home')
+            return redirect('jobs/home')
         else:
             print(form.errors)
 
-    return render(request,'add_comment.html', {'comment_form': form})
+    return render(request,'jobs/add_comment.html', {'comment_form': form})
 
 
 def comments(request, board_name, pk):
@@ -229,7 +226,7 @@ def saved_jobs(request):
                 pass
 
         context_dict['positions'] = positions
-    return render(request, 'saved_jobs.html', context_dict)
+    return render(request, 'jobs/saved_jobs.html', context_dict)
 
 
 @login_required
@@ -262,9 +259,9 @@ def apply(request, pk):
                 'admin@inroad.co',
                 ['andrew@inroad.co'])
             email.send()
-            return redirect('saved_jobs')
+            return redirect('jobs/saved_jobs')
 
         else:
             print(form.errors)
 
-    return render(request,'application.html', {'application_form': form})
+    return render(request,'jobs/application.html', {'application_form': form})

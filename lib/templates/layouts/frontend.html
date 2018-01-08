@@ -5,7 +5,7 @@
 {% block head %}{% endblock %}
 <body>
         <nav class="navbar navbar-expand-md inroad-blue sticky-top">
-                <a class = "navbar-brand" href="{% url 'home' %}"><img src='/static/img/Inroad-white.png' style="height: 50px"></a>
+                <a class = "navbar-brand" href="{% url 'landing:home' %}"><img src='/static/img/Inroad-white.png' style="height: 50px"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar7">
                         <span class="navbar-toggler-icon"></span>
                 </button>
@@ -14,10 +14,10 @@
                         {% if user.is_authenticated %}
                                 {% get_extra_data request as extra_data %}
                                 <li class="nav-item">
-                                        <a href="{% url 'saved_jobs' %}"><button class="btn btn-inroad-nav btn-round btn-lg" type="button">Saved Jobs</button></a>
+                                        <a href="{% url 'jobs:saved_jobs' %}"><button class="btn btn-inroad-nav btn-round btn-lg" type="button">Saved Jobs</button></a>
                                 </li>
                                 <li class="nav-item">
-                                        <a href="{% url 'profile' %}"><button class="btn btn-inroad-nav btn-round btn-lg profile-pic" type="button"><img class = "nav-icon" src="{{ extra_data.picture_url }}">  Profile</button></a>
+                                        <a href="{% url 'users:profile' %}"><button class="btn btn-inroad-nav btn-round btn-lg profile-pic" type="button"><img class = "nav-icon" src="{{ extra_data.picture_url }}">  Profile</button></a>
                                 </li>
                         {% else %}
                                 <li class="nav-item">

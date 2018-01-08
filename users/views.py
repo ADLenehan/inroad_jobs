@@ -4,26 +4,27 @@ from django.template.context import RequestContext
 from django.contrib.auth import logout as auth_logout
 
 
+@login_required(login_url='/')
 def logout(request):
     auth_logout(request)
-    return redirect('/')
+    return render_to_response('jobs/home.html')
 
 
 def login(request):
-    return render_to_response('login.html', context=RequestContext(request))
+    return render_to_response('registration/login.html', context=RequestContext(request))
 
 
 @login_required(login_url='/')
 def profile(request):
     if request.user and request.user.is_authenticated():
         user_data = request.user.social_auth.get(provider = 'linkedin-oauth2').extra_data
-        return render(request, 'profile.html', user_data)
+        return render(request, 'users/profile.html', user_data)
     else:
         return ''
 
-@login_required(login_url='/')
+
 def home(request):
-    return render_to_response('home.html')
+    return render_to_response('jobs/home.html')
 
 
 

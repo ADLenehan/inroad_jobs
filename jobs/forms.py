@@ -7,10 +7,11 @@ class BoardForm(forms.ModelForm):
     slug = forms.SlugField(max_length=100, help_text="Slug", required=True)
     title = forms.CharField(max_length=200, required=True)
     description = forms.Textarea()
+    logo = forms.ImageField(required=False)
 
     class Meta:
         model = Board
-        fields = ['slug', 'title', 'description']
+        fields = ['slug', 'title', 'description','logo']
 
     def __str__(self):
         return self.title

@@ -19,7 +19,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'', include('jobs.urls')),
-    url(r'', include('users.urls')),
+    url(r'', include('landing.urls', namespace='landing')),
+    url(r'', include('jobs.urls', namespace='jobs')),
+    url(r'', include('users.urls', namespace='users')),
+    url(r'', include('social_django.urls', namespace='social')),
     url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

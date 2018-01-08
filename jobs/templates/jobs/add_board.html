@@ -4,17 +4,17 @@
     {% endblock %}
     {% block main_content %}
     <div class="card w-75 mx-auto" >
-        <form id = "board_form" method = "post">
+        <form id = "board_form" method = "post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type='hidden' name='board_id' value='{{ board_id }}'>
-            {% if board.non_field_errors %}
-                    {{ board_form.non_field_errors.as_text }}
+            {% if board_form.errors %}
+                    {{ board_form.errors.as_text }}
             {% endif %}
             <p>Slug: {{ board_form.slug }}</p>
             <p>Title: {{ board_form.title }}</p>
             <p>Description: {{ board_form.description }}</p>
-            <button type="submit" name="submit" value="Create Board">Create Board</button>
+            <p>Logo: {{ board_form.logo }}</p>
+            <button class="btn btn-inroad" type="submit" name="submit" value="Create Board">Create Board</button>
         </form>
-        <span id="indeed_at"><a title="Job Search" href="https://www.indeed.com" rel="nofollow" >jobs by <img alt=Indeed src="https://www.indeed.com/p/jobsearch.gif" style="border: 0; vertical-align: middle;"></a></span>
     </div>
     {% endblock %}

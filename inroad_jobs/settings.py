@@ -16,10 +16,14 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '771dpd0zeujfia'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = 'U7lEvvQvRGUk1xI8'
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = '-2ckaej0hbd!+9s-%h5y(c9+^mt8ukkfk_h+rk5mjkhdescwmz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -49,7 +53,8 @@ INSTALLED_APPS = [
     'social_django',
     'requests',
     'grequests',
-    'pprint'
+    'pprint',
+    'landing'
 ]
 
 MIDDLEWARE = [
@@ -142,7 +147,7 @@ SOCIAL_AUTH_DISCONNECT_PIPELINE = (
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = '/the-dp/board/'
 
 WSGI_APPLICATION = 'inroad_jobs.wsgi.application'
 
@@ -211,6 +216,6 @@ STATICFILES_LOCATION = '/static/'
 STATIC_URL = '/static/'
 
 #Media routing
-MEDIA_DIR = os.path.join(BASE_DIR, 'media/')
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = MEDIA_DIR
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'

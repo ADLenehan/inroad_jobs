@@ -36,6 +36,7 @@ class Board(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     title = models.CharField(max_length=200, blank=False, null=False)
     description = models.CharField(max_length=1000, null=True, blank=True)
+    logo = models.ImageField(blank=True, null=True, upload_to='images/publishers', default='images/publishers/no-image.png')
 
     def __str__(self):
         return self.slug

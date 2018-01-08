@@ -1,0 +1,36 @@
+    {% extends 'frontend.html' %}
+    {% load static %}
+    {% block title_block %}
+    Thanks
+    {% endblock %}
+    {% block main_content %}
+
+    <div class="site-wrapper">
+
+        <div class="site-wrapper-inner">
+
+            <div class="cover-container">
+
+
+                <main role="main" class="inner cover">
+
+                    <br><br><br>
+                    <h3>Thanks for your interest! We'll be reaching out. In the meantime, feel free to check out our cool
+                        <a href="https://www.facebook.com/inroadjobs/">social media</a> or just say <a href="mailto:hello@inroad.co">hello</a>!</h3>
+
+                </main>
+
+                <footer class="mastfoot">
+                    <div class="inner">
+                        <img class = "thanks-image" src = "{% static 'img/Inroad-copy.png' %}">
+                    </div>
+                </footer>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {% endblock %}

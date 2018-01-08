@@ -1,0 +1,80 @@
+    {% extends 'landing/frontend.html' %}
+    {% load static %}
+    {% block title_block %}
+    Home
+    {% endblock %}
+    {% block main_content %}
+
+    <div class="site-wrapper">
+
+        <div class="site-wrapper-inner">
+
+            <div class="cover-container">
+
+
+                <main role="main" class="inner cover">
+                    <img class = "landing-image" src = "{% static 'img/Inroad-whiteback.png' %}">
+                    <br><br>
+                    <h3>Pay per application recruiting for employers</h3>
+                    <h3 class="cover-heading">Free job board software for publishers</h3>
+                    <p class="lead">
+                        <br>
+                        <a href="#" class="btn btn-inroad" data-toggle="modal" data-target="#exampleModalLive" id = "mainButton">Sign up for early access</a>
+                    </p>
+                </main>
+
+                <footer class="mastfoot">
+                    <div class="inner">
+                        <img class = "thanks-image" src = "{% static 'img/Inroad-copy.png' %}">
+                    </div>
+                </footer>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header card-img-top img-responsive" style= "background-color: #36D1C4;">
+                    <img src="{% static 'img/Inroad-white.png' %}">
+                </div>
+                <div class="modal-body">
+                    <p>We're in the process of building out our Beta product and marketplace, and we'd love for you to be involved! Let us know how we can help. We won't ever share your info with anyone. </p>
+                    <form method = "post" id="newModalForm">
+                        {% csrf_token %}
+
+
+                        <div class="form-group">
+                            <label for="site">Name</label>
+                            <input type="text" class="form-control form-control-lg" id="site" name="site">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control form-control-lg" id="email" name="email">
+                        </div>
+                        <div class="form-group">
+                        <label for="purpose">I'm an...</label>
+                        <select class="form-control form-control-lg" id="purpose" name="purpose">
+                            {% for choice in signup_form.purpose.field.choices %}
+                            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                        <div class="card-block buttons">
+                            <button class='btn btn-inroad' type="submit" name="submit" value="Create Signup" style = 'margin-right: 2px;' id="btnSaveIt" >Sign Up</button><a href = ""><button class='btn btn-inroad-red' type='button' data-dismiss="modal" aria-label="Close" id="btnCloseIt">Cancel</button></a>
+                        </div>
+
+                    </form>
+                    <script>
+                    $("#newModalForm").validate();
+                    </script>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {% endblock %}

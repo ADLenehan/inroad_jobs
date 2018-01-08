@@ -2,7 +2,9 @@
     {% if user and not user.is_anonymous %}
       <a>Hello, {{ user.get_full_name }}!</a>
       <br>
-      <a href="/logout">Logout</a>
+      <a href = "{% url 'users:logout' %}"><button class="btn btn-inroad-red btn-round btn-lg" style = "margin-right: 2px;">
+            Logout
+        </button></a>
     {% else %}
       <a href="{% url 'social:begin' backend='linkedin-oauth2' %}">Login with Linkedin</a>
     {% endif %}

@@ -3,7 +3,6 @@ from jobs import views
 
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
     url(r'^add_board/$', views.add_board, name='add_board'),
     url(r'^saved_jobs/$', views.saved_jobs, name='saved_jobs'),
     url(r'^(?P<pk>\d+)/save_job/$', views.save_job, name='save_job'),

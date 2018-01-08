@@ -199,6 +199,7 @@ form {
   margin:0 auto;
   padding-top: 10px;
   padding-bottom: 10px;
+  max-width: 70%;
  }
 
 .card-block.buttons {
@@ -221,6 +222,10 @@ form {
 /**************/
 /* images  */
 /************/
+
+.board-img {
+    width: 50%;
+}
 
 .nav-icon {
     display: inline-block;
@@ -262,7 +267,7 @@ form {
 
 .modal {
   position: fixed;
-  top: 100px;
+  top: 40px;
   right: 0;
   bottom: 0;
   left: 0;

@@ -3,15 +3,10 @@
         Home
     {% endblock %}
     {% block main_content %}
-        {% if request.user.is_active and request.user.is_staff %}
-            <h4><a href="{% url 'add_board' %}">Add a New Board</a><br /></h4>
-        {% endif %}
+
         {% if board %}
-        {% if request.user.is_active and request.user.is_staff %}
-            <h4><a href="{% url 'add_position' board_name=board.slug %}">Add a New Position</a> </h4>
-        {% endif %}
-            <h2 class="thin">{{ board.title }}</h2>
-            <h3 class="thin">{{ board.description}}</h3>
+            <img class="board-img" src="/media/{{ board.logo }}">
+            <h4 class="thin">{{ board.description}}</h4>
         {% endif %}
         {% if positions|length > 0 %}
             <div class = card-columns>
@@ -30,8 +25,16 @@
                 {% endfor %}
             </div>
         {% endif %}
+        {% if request.user.is_active and request.user.is_staff %}
+            <h4><a href="{% url 'jobs:add_board' %}">Add a New Board</a><br /></h4>
+        {% endif %}
+        {% if board %}
+            {% if request.user.is_active and request.user.is_staff %}
+                <h4><a href="{% url 'jobs:add_position' board_name=board.slug %}">Add a New Position</a> </h4>
+            {% endif %}
+        {% endif %}
 
-            <span id="indeed_at"><a title="Job Search" href="https://www.indeed.com" rel="nofollow" >jobs by <img alt=Indeed src="https://www.indeed.com/p/jobsearch.gif" style="border: 0; vertical-align: middle;"></a></span>
+            <span id="indeed_at"><a title="Job Search" href="https://www.indeed.com" rel="nofollow" >jobs by <img alt=Indeed src="/static/img/indeed.png" style="border: 0; vertical-align: top; width: 80px;"></a></span>
 
             <!-- .modal-profile -->
             <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
