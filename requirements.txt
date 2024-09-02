@@ -16,7 +16,7 @@ gevent==1.2.2
 greenlet==0.4.12
 grequests==0.3.0
 gun==1.0.1
-gunicorn==19.7.1
+gunicorn==21.2.0
 idna==2.6
 jmespath==0.9.3
 oauthlib==2.0.3
