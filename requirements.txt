@@ -6,7 +6,7 @@ certifi==2017.7.27.1
 chardet==3.0.4
 colorama==0.3.7
 dj-database-url==0.4.2
-Django==1.11.5
+Django==4.2.27
 docker-py==1.7.2
 dockerpty==0.4.1
 docopt==0.6.2
@@ -40,7 +40,7 @@ social-auth-app-django==1.2.0
 social-auth-core==1.4.0
 tabulate==0.7.5
 termcolor==1.1.0
-urllib3==1.22
+urllib3==2.6.0
 wcwidth==0.1.7
 websocket-client==0.44.0
 whitenoise==3.3.1
